@@ -1,0 +1,24 @@
+.home{
+    margin-top: 72px;
+    display: flex;
+    position: relative;
+}
+
+  .left-side{
+    display: flex;
+    align-items: flex-start;
+  }
+  .left-side ul {
+    width: 18%;
+    height: 100vh;
+    font-size: 12px;
+  }
+  
+  .right-side {
+    width: 80%;
+    position: absolute;
+    right: 10px;
+    
+    
+
+  }

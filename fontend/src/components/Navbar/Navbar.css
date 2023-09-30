@@ -1,0 +1,14 @@
+  .navBar{
+    overflow-y: auto;
+    height: 100vh
+  }
+  .Menu {
+    background-color: white;
+    color: black;
+    height: 100vh;
+    position: fixed;
+    top: 15; 
+    overflow: auto;
+    width: 50%;
+    overflow: hidden;
+  }
