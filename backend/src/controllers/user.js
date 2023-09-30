@@ -19,7 +19,7 @@ const register = async (req, res) => {
     } = req.body;
     const fileImage = req.file;
 
-    console.log(req.body);
+    console.log(fileImage);
 
     try {
         const { error } = registerValidator.validate(req.body, { abortEarly: false })
@@ -31,20 +31,20 @@ const register = async (req, res) => {
             })
         }
 
-        const emailExists = await userModel.findOne({ email: email });
-        const userNameExists = await userModel.findOne({ userName: userName });
-        const phoneNumberExists = await userModel.findOne({ phoneNumber: phoneNumber });
-        if (emailExists) {
+        const userExists = await userModel.find({ email: email, userName: userName, phoneNumber: phoneNumber});
+        // const userNameExists = await userModel.findOne({ userName: userName });
+        // const phoneNumberExists = await userModel.findOne({ phoneNumber: phoneNumber });
+        if (userExists.email) {
             return res.status(400).json({
                 message: "Email này đã được đăng ký, bạn vui lòng nhập email khác!"
             })
         }
-        if (userNameExists) {
+        if (userExists.userName) {
             return res.status(400).json({
                 message: "Username này đã được đăng ký, bạn vui lòng nhập Username khác!"
             })
         }
-        if (phoneNumberExists) {
+        if (userExists.phoneNumber) {
             return res.status(400).json({
                 message: "Số điện thoại này đã được đăng ký, bạn vui lòng nhập số điẹn thoại khác!"
             })
@@ -64,6 +64,8 @@ const register = async (req, res) => {
             password: hash,
             role
         })
+
+        console.log("user:" + fileImage);
 
         user.password = undefined;
         return res.status(200).json({

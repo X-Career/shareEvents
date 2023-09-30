@@ -14,6 +14,7 @@ const User = mongoose.Schema({
     },
     image: {
         type: String,
+        default: ""
     },
     email: {
         type: String,
@@ -22,7 +23,6 @@ const User = mongoose.Schema({
     },
     phoneNumber: {
         type: String,
-        match: /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/,
         unique: true
     },
     userName: {
@@ -39,6 +39,7 @@ const User = mongoose.Schema({
         default: "member"
     }
 }, {
+    versionKey: false,
     timestamps: true,
 })
 

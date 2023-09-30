@@ -1,15 +1,21 @@
-const Joi = require('joi');
+// const Joi = require('joi');
+
+const Joi = require('joi')
+    .extend(require('@joi/date'));
 
 const registerValidator = Joi.object({
     fullName: Joi.string().required().messages({
         "string.empty": "Họ và tên không được để trống!",
         "any.required": "Trường \"fullName\" là bắt buộc!"
     }),
+    dateOfBirth: Joi.date().format("YYYY-MM-DD").utc({
+        "date.pattern.base": "Ngày sinh không đúng định dạng!"
+    }),
     userName: Joi.string().required().messages({
         "string.empty": "userName không được để trống!",
         "any.required": "Trường \"userName\" là bắt buộc!" 
     }),
-    phoneNumber: Joi.string().regex(/^[0-9]{10}$/).messages({
+    phoneNumber: Joi.string().length(10).required().messages({
         "string.pattern.base": `Số điện thoại phải có 10 chữ số!`
     }),
     email: Joi.string().email().required().messages({
