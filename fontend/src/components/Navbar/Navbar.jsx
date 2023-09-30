@@ -126,7 +126,7 @@ const NavBar = () => {
 
   return (
     <>
-        <div className="demo-logo-vertical" />
+      <div className="navBar">
         <Menu className='Menu' mode="inline" defaultSelectedKeys={['4']}>
           {items.map(item =>
             item.divider ? (
@@ -136,10 +136,10 @@ const NavBar = () => {
                 {item.icon && item.icon}
                 {item.label}
               </Menu.Item>
-              
             )
           )}
         </Menu>
+        </div>
         </>
   );
 };

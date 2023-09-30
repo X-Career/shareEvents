@@ -8,9 +8,6 @@ const Home = () => {
     <div className='home'>
       <div className="left-side"> <NavBar /></div>
       <div className="right-side"> <Contents /></div>
-     
-     
-
     </div>
   )
 }

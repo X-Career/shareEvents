@@ -26,7 +26,7 @@ const Header = () => {
     <AntdHeader className="header">
       <div className="left-section">
         <div className="logo">
-          <img src={logo} alt="Logo" />
+          <Link to="/"><img src={logo} alt="Logo" /></Link>
         </div>
         <div className="search">
           <Input.Search placeholder="Search" enterButton={<SearchOutlined />} />

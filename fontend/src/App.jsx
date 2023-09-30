@@ -5,7 +5,6 @@ import SignUp from './pages/SignUp/SignUp'
 import Home from './pages/Home/Home'
 import Login from './pages/Login/Login'
 import AppHeader from './components/Header/Header';
-import Footer from './components/Footer/Footer';
 import Events from './pages/Events/Events';
 import Event from './pages/Event/Event';
 import SuccessPage from './pages/Users/SuccessPage';
@@ -18,7 +17,6 @@ import SuccessPage from './pages/Users/SuccessPage';
       <div className="app">
         <AppHeader />
         <Outlet />
-        <Footer />
       </div>
     );
   };
