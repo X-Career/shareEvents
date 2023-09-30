@@ -1,0 +1,20 @@
+.home{
+    margin-top: 72px;
+    display: flex;
+    position: relative;
+}
+
+  
+  .left-side {
+    width: 20%;
+    height: 100vh;
+
+  }
+  
+  .right-side {
+    width: 80%;
+    position: absolute;
+    right: 10px;
+    
+
+  }

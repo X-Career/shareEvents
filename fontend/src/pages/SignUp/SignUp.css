@@ -1,0 +1,37 @@
+.signUpPage{
+  background-color: #f9f5f5;
+}
+.register-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-top: 70px;
+    border: 1px solid rgb(230, 235, 245);
+    border-radius: 10px;
+    background-color: white;
+}
+    
+    
+  
+  .register-form form {
+    max-width: 100%;
+  }
+  
+  .register-form .ant-form-item {
+    margin-bottom: 16px;
+  }
+  
+  .register-form .ant-input {
+    border-radius: 6px;
+  }
+  
+  .register-form .ant-btn {
+    border-radius: 6px;
+  }
+  
+  /* Responsive CSS */
+  @media (max-width: 768px) {
+    .register-form {
+      padding: 10px;
+    }
+  }
