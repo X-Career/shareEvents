@@ -33,7 +33,8 @@ const registerValidator = Joi.object({
         "any.required": "Trường \"confirmPassword\" là bắt buộc!",
         "string.min": "confirmPassword phải có ít nhất {#limit} ký tự!",
         "any.only": "Mật khẩu nhập lại không khớp!"
-    })
+    }),
+    role: Joi.string().required()
 });
 
 const loginValidator = Joi.object({

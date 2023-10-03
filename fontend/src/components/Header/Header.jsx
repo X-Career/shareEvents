@@ -43,7 +43,7 @@ const Header = () => {
         </div>
         <div className="menu">
           <Link to="/login"><Button type="text">Log In</Button></Link>
-          <Link to="/signup"><Button type="text">Sign Up</Button></Link>
+          <Link to="/register"><Button type="text">Sign Up</Button></Link>
         </div>
         <div className="user">
           <Dropdown overlay={UserMenu} trigger={['click']}>

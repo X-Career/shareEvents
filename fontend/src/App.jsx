@@ -42,7 +42,7 @@ import SuccessPage from './pages/Users/SuccessPage';
           element: <Login />,
         },
         {
-          path: "/signup",
+          path: "/register",
           element: <SignUp />,
         },
         {
