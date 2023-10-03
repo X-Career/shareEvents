@@ -27,7 +27,7 @@ const SignUp = () => {
       .then((response) => {
         console.log(response.data);
         message.success("Đăng ký thành công!");
-        navigate("/");
+        navigate("/login");
       })
       .catch((error) => {
         console.error(error.response.data);
@@ -88,7 +88,7 @@ const SignUp = () => {
         </Radio.Group>
       </Form.Item> */}
         <Form.Item name="role" label="Role">
-          <Select placeholder="Select a role">
+          <Select placeholder="Select a role" defaultValue={roles[0]}>
             {roles.map((role) => (
               <Option key={role} value={role} disabled={role === adminRole}>
                 {role}

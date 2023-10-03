@@ -4,7 +4,7 @@ const userModel = require("../models/user.model.js");
 const authentication = async (req, res, next) => {
     const bearerToken = req.headers.authorization;
     if(!bearerToken){
-        return res.status(401).json({message: "Ban chua dang nhap"})
+        return res.status(401).json({message: "Bạn chưa đăng nhập"})
     }
     const token = bearerToken.split(" ")[1]
     try {
