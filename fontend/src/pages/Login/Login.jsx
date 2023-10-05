@@ -1,116 +1,133 @@
 import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
-import { Link } from "react-router-dom"
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+
+
 const Login = () => {
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const API_Login = "http://localhost:3001/user/login";
+  const navigate = useNavigate ()
+  const onFinish = async (values) => {
+    try {
+      const { userName, password } = values;
+
+      const response = await axios.post(API_Login, { userName, password });
+
+      if (response.status === 200) {
+        console.log("Đăng nhập thành công!");
+        alert (response.data.message);
+        console.log(response.data);
+        navigate ("/")
+
+      } else {
+        console.log("Đăng nhập thất bại.");
+      }
+    } catch (error) {
+      console.log("Lỗi:", error.response.data.message);
+      alert (error.response.data.message);
+    }
   };
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
   return (
-    <>
+    <div
+      style={{
+        marginTop: "20px",
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#f9f5f5",
+      }}
+    >
       <div
-        className=""
         style={{
-          marginTop: "20px",
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#f9f5f5",
+          border: "1px solid rgb(51, 51, 51)",
+          padding: "16px",
+          borderRadius: "10px",
+          backgroundColor: "#ffffff",
+          maxWidth: "400px",
+          width: "100%",
         }}
       >
-        <div
-          style={{
-            border: "1px solid rgb(230, 235, 245)",
-            padding: "16px",
-            borderRadius: "17px",
-            backgroundColor: "white",
-          }}
+        <h1 style={{ textAlign: "center", marginBottom: "30px" }}>Login</h1>
+        <Form
+          name="basic"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
         >
-          <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
-            Đăng nhập
-          </h1>
-          <Form
-            name="basic"
-            labelCol={{
-              span: 8,
-            }}
-            wrapperCol={{
-              span: 16,
-            }}
-            style={{
-              maxWidth: 600,
-            }}
-            initialValues={{
-              remember: true,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
+          <Form.Item
+            name="userName"
+            rules={[
+              {
+                required: true,
+                message: "Please input your username!",
+              },
+            ]}
           >
-            <Form.Item
-              label="Username"
-              name="username"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your username!",
-                },
-              ]}
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Username"
+            />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+            ]}
+          >
+            <Input.Password
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              placeholder="Password"
+            />
+          </Form.Item>
+          <Form.Item name="remember">
+            <Checkbox>Remember me</Checkbox>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              block
+              style={{
+                background:
+                  "linear-gradient(to right, #a29bfe, #6c5ce7, #eb4d4b, #fd9644)",
+                borderRadius: "30px",
+              }}
+              htmlType="submit"
             >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your password!",
-                },
-              ]}
-            >
-              <Input.Password />
-            </Form.Item>
-
-            <Form.Item
-              name="remember"
-              valuePropName="checked"
-              wrapperCol={{
-                offset: 8,
-                span: 16,
+              Login
+            </Button>
+          </Form.Item>
+          <Form.Item>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item>
-
-            <Form.Item
-              wrapperCol={{
-                offset: 8,
-                span: 16,
-              }}
-            >
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-              <div
-                style={{
-                  paddingTop: "10px",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <Link to="/signup"><a>Sign Up</a></Link>
-                <a>Forgot password ?</a>
-              </div>
-            </Form.Item>
-          </Form>
-        </div>
+              <Link to="/" style={{ color: "#000" }}>
+                Forgot password?
+              </Link>
+              <Link to="/register" style={{ color: "#000" }}>
+                Sign Up
+              </Link>
+            </div>
+          </Form.Item>
+        </Form>
       </div>
-    </>
+    </div>
   );
 };
+
 export default Login;

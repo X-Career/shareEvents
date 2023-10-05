@@ -16,6 +16,7 @@ const adminRole = "admin";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const API_Register = "http://localhost:3001/user/register"
   const onFinish = (values) => {
     const data = {
       ...values,
@@ -23,7 +24,7 @@ const SignUp = () => {
     };
 
     axios
-      .post("http://localhost:3001/user/register", data)
+      .post(API_Register, data)
       .then((response) => {
         console.log(response.data);
         message.success("Đăng ký thành công!");
