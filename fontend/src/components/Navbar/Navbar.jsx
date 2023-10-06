@@ -1,5 +1,5 @@
-import React from 'react';
-import "./NavBar.css"
+import React from "react";
+import "./NavBar.css";
 import {
   AppstoreOutlined,
   BarChartOutlined,
@@ -9,113 +9,121 @@ import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
-} from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
+} from "@ant-design/icons";
+import { Layout, Menu, theme } from "antd";
+import { Link } from "react-router-dom";
 
 // const { Sider } = Layout;
 
 const items = [
-  
   {
-    key: '1',
+    key: "1",
     icon: <UserOutlined />,
-    label: 'First Item',
+    label: "First Item",
+    to: "/events/_id",
   },
   {
-    key: '2',
+    key: "2",
     icon: <VideoCameraOutlined />,
-    label: 'Second Item',
+    label: "Second Item",
+    to: "/events/_id",
   },
   {
-    key: '3',
+    key: "3",
     icon: <UploadOutlined />,
-    label: 'Third Item',
+    label: "Third Item",
+    to: "/events/_id",
   },
   {
-    key: '4',
+    key: "4",
     icon: <BarChartOutlined />,
-    label: 'Fourth Item',
+    label: "Fourth Item",
+    to: "/events/_id",
   },
   {
-    key: '5',
+    key: "5",
     icon: <CloudOutlined />,
-    label: 'Fifth Item',
+    label: "Fifth Item",
+    to: "/events/_id",
   },
   {
-    key: '6',
+    key: "6",
     icon: <AppstoreOutlined />,
-    label: 'Sixth Item',
+    label: "Sixth Item",
+    to: "/events/_id",
   },
   {
-    key: '7',
+    key: "7",
     icon: <TeamOutlined />,
-    label: 'Seventh Item',
+    label: "Seventh Item",
+    to: "/events/_id",
   },
   {
-    key: '8',
+    key: "8",
     icon: <ShopOutlined />,
-    label: 'Eighth Item',
+    label: "Eighth Item",
+    to: "/events/_id",
   },
   {
     key: "divider1",
     divider: true,
   },
   {
-    key: '9',
-    label: 'About Us',
+    key: "9",
+    label: "About Us",
   },
   {
-    key: 'divider2',
+    key: "divider2",
     divider: true,
   },
   {
-    key: '10',
-    label: 'For Organizer',
+    key: "10",
+    label: "For Organizer",
   },
   {
-    key: 'divider3',
+    key: "divider3",
     divider: true,
   },
   {
-    key: '11',
+    key: "11",
     icon: <ShopOutlined />,
-    label: 'FAQ',
+    label: "FAQ",
   },
   {
-    key: 'divider4',
+    key: "divider4",
     divider: true,
   },
   {
-    key: '12',
+    key: "12",
     icon: <ShopOutlined />,
-    label: 'Operational regulations',
+    label: "Operational regulations",
   },
   {
-    key: 'divider5',
+    key: "divider5",
     divider: true,
   },
   {
-    key: '13',
+    key: "13",
     icon: <ShopOutlined />,
-    label: 'Information privacy policy',
+    label: "Information privacy policy",
   },
   {
-    key: 'divider6',
+    key: "divider6",
     divider: true,
   },
   {
-    key: '14',
+    key: "14",
     icon: <ShopOutlined />,
-    label: 'Payment privacy policy',
+    label: "Payment privacy policy",
   },
   {
-    key: 'divider7',
+    key: "divider7",
     divider: true,
   },
   {
-    key: '15',
+    key: "15",
     icon: <ShopOutlined />,
-    label: 'Shipping and Delivery conditions',
+    label: "Shipping and Delivery conditions",
   },
 ];
 
@@ -127,25 +135,21 @@ const NavBar = () => {
   return (
     <>
       <div className="navBar">
-        <Menu className='Menu' mode="inline" defaultSelectedKeys={['4']}>
-          {items.map(item =>
+        <Menu className="Menu" mode="inline">
+          {items.map((item) =>
             item.divider ? (
               <Menu.Divider key={item.key} />
             ) : (
               <Menu.Item key={item.key}>
                 {item.icon && item.icon}
-                {item.label}
+                {item.to ? <Link to={item.to}>{item.label}</Link> : item.label}
               </Menu.Item>
             )
           )}
         </Menu>
-        </div>
-        </>
+      </div>
+    </>
   );
 };
 
 export default NavBar;
-
-
-
-

@@ -3,7 +3,9 @@ import "./Events.css"
 
 const Events = () => {
   return (
-    <div>Events</div>
+    <div className='categories-container'>
+      <h1>Event categories</h1>
+    </div>
   )
 }
 

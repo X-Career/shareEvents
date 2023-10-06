@@ -17,23 +17,21 @@ const adminRole = "admin";
 const SignUp = () => {
   const navigate = useNavigate();
   const API_Register = "http://localhost:3001/user/register"
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     const data = {
       ...values,
       role: values.role || "member",
     };
 
-    axios
-      .post(API_Register, data)
-      .then((response) => {
-        console.log(response.data);
-        message.success("Đăng ký thành công!");
-        navigate("/login");
-      })
-      .catch((error) => {
-        console.error(error.response.data);
-        alert(error.response.data.message || "Đăng ký thất bại");
-      });
+    try {
+      const response = await axios.post(API_Register, data);
+      console.log(response.data);
+      message.success("Đăng ký thành công!");
+      navigate("/login");
+    } catch (error) {
+      console.error(error.response.data);
+      alert(error.response.data.message || "Đăng ký thất bại");
+    }
   };
 
   return (
@@ -68,26 +66,6 @@ const SignUp = () => {
         >
           <Input prefix={<PhoneOutlined />} placeholder="Phone Number" />
         </Form.Item>
-
-        {/* <Form.Item
-        name="dob"
-        label="Date of Birth"
-        rules={[
-          { required: true, message: "Please input your date of birth!" },
-        ]}
-      >
-        <DatePicker style={{ width: "100%" }} placeholder="Date of Birth" />
-      </Form.Item> */}
-        {/* <Form.Item
-        name="gender"
-        label="Gender"
-        rules={[{ required: true, message: "Please select your gender!" }]}
-      >
-        <Radio.Group>
-          <Radio value="Male">Male</Radio>
-          <Radio value="Female">Female</Radio>
-        </Radio.Group>
-      </Form.Item> */}
         <Form.Item name="role" label="Role">
           <Select placeholder="Select a role" defaultValue={roles[0]}>
             {roles.map((role) => (

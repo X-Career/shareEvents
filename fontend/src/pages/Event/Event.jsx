@@ -3,7 +3,9 @@ import "./Event.css"
 
 const Event = () => {
   return (
-    <div>Event</div>
+    <div className='event-detail-container'>
+      <h1>Event</h1>
+      </div>
   )
 }
 

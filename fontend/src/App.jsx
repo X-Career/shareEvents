@@ -30,11 +30,11 @@ import SuccessPage from './pages/Users/SuccessPage';
           element: <Home />,
         },
         {
-          path: "/events/:id",
+          path: "/events/:_id",
           element: <Events />,
         },
         {
-          path: "/event/:id",
+          path: "/event/:_id",
           element: <Event />,
         },
         {
