@@ -38,6 +38,11 @@ const Event = mongoose.Schema({
         type: Number,
         default: 0
     },
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "commnet",
+        require: true,
+    }],
     categories: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "category",

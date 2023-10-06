@@ -1,7 +1,4 @@
-// const Joi = require('joi');
-
-const Joi = require('joi')
-    .extend(require('@joi/date'));
+const Joi = require('joi').extend(require('@joi/date'));
 
 const registerValidator = Joi.object({
     fullName: Joi.string().required().messages({
@@ -34,7 +31,10 @@ const registerValidator = Joi.object({
         "string.min": "confirmPassword phải có ít nhất {#limit} ký tự!",
         "any.only": "Mật khẩu nhập lại không khớp!"
     }),
-    role: Joi.string().required()
+    role: Joi.string().required().messages({
+        "string.empty": "role không được để trống!",
+        "any.required": "Trường \"role\" là bắt buộc!"
+    })
 });
 
 const loginValidator = Joi.object({
