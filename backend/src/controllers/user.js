@@ -7,19 +7,15 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const register = async (req, res) => {
-    const { 
-        fullName,
-        gender,
-        dayOfBirth,
-        email,
-        phoneNumber,
-        userName,
-        password,
-        role
-    } = req.body;
+    const fullName = req.body.fullName;
+    const gender = req.body.gender;
+    const dayOfBirth = req.body.dayOfBirth;
+    const email = req.body.email;
+    const phoneNumber = req.body.phoneNumber;
+    const userName = req.body.userName;
+    const password = req.body.password;
+    const role = req.body.role;
     const fileImage = req.file;
-
-    console.log(fileImage);
 
     try {
         const { error } = registerValidator.validate(req.body, { abortEarly: false })
@@ -31,20 +27,22 @@ const register = async (req, res) => {
             })
         }
 
-        const userExists = await userModel.find({ email: email, userName: userName, phoneNumber: phoneNumber});
-        // const userNameExists = await userModel.findOne({ userName: userName });
-        // const phoneNumberExists = await userModel.findOne({ phoneNumber: phoneNumber });
-        if (userExists.email) {
+        const mailExists = await userModel.findOne({email: email});
+        if (mailExists) {
             return res.status(400).json({
                 message: "Email này đã được đăng ký, bạn vui lòng nhập email khác!"
             })
         }
-        if (userExists.userName) {
+
+        const userNameExists = await userModel.findOne({ userName: userName });
+        if (userNameExists) {
             return res.status(400).json({
                 message: "Username này đã được đăng ký, bạn vui lòng nhập Username khác!"
             })
         }
-        if (userExists.phoneNumber) {
+
+        const phoneNumberExists = await userModel.findOne({ phoneNumber: phoneNumber });
+        if (phoneNumberExists) {
             return res.status(400).json({
                 message: "Số điện thoại này đã được đăng ký, bạn vui lòng nhập số điẹn thoại khác!"
             })
@@ -65,7 +63,7 @@ const register = async (req, res) => {
             role
         })
 
-        console.log("user:" + fileImage);
+        // console.log("user:" + fileImage);
 
         user.password = undefined;
         return res.status(200).json({

@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from 'react-hot-toast';
 import axios from "axios";
 
 
@@ -17,16 +18,16 @@ const Login = () => {
 
       if (response.status === 200) {
         console.log("Đăng nhập thành công!");
-        alert (response.data.message);
+        alert(response.data.message);
         console.log(response.data);
         navigate ("/")
 
       } else {
-        console.log("Đăng nhập thất bại.");
+        alert("Đăng nhập thất bại.");
       }
     } catch (error) {
       console.log("Lỗi:", error.response.data.message);
-      alert (error.response.data.message);
+      alert(error.response.data.message);
     }
   };
 

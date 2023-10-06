@@ -36,6 +36,7 @@ const User = mongoose.Schema({
     },
     role: {
         type: String,
+        require: true,
         default: "member"
     }
 }, {
