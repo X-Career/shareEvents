@@ -14,5 +14,5 @@ const commentValidator = Joi.object({
     }),
 });
 
-module.exports = commentValidator
+module.exports = commentValidator;
 
