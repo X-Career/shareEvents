@@ -1,5 +1,5 @@
 const categoryModel = require("../models/category.model.js");
-const { categoryValidator } = require("../validations/category.js");
+const categoryValidator = require("../validations/category.js");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
@@ -46,6 +46,7 @@ const createCategory = async (req, res) => {
                 message: error.details[0].message || "Please re-check your data!",
             });
         }
+
         const data = await categoryModel.create(req.body)
         if (!data) {
             return res.status(404).json({

@@ -10,13 +10,13 @@ const authentication = async (req, res, next) => {
     }
     const token = bearerToken.split(" ")[1]
     try {
-        const verify_token = jwt.verify(token,process.env?.SECRET_KEY)
+        const verify_token = jwt.verify(token,process.env?.JWT_SECRET)
 
         if(!verify_token){
             return res.status(401).json({message: "Bạn chưa đăng nhập!"})
         }
 
-        const userId = verify_token?.userId
+        const userId = verify_token?._id
 
         const checkUser = await userModel.findById(userId)
 
@@ -43,20 +43,26 @@ const checkPermissionAdmin = async (req, res, next) => {
         }
 
         const token = bearerToken.split(" ")[1]
-        
+
         if(!token) {
             return res.status(400).json({message: "Token rỗng!"})
         }
 
-        const verify_token = jwt.verify(token,process.env?.SECRET_KEY)
+        const verify_token = jwt.verify(token,process.env?.JWT_SECRET)
+
+        // console.log(verify_token);
 
         if(!verify_token){
             return res.status(401).json({message: "Bạn chưa đăng nhập!"})
         }
 
-        const userId = verify_token?.userId
+        const userId = verify_token?._id
+
+        // console.log(verify_token?._id);
 
         const checkUser = await userModel.findById(userId)
+
+        console.log(checkUser);
 
         if(!checkUser || checkUser.role !== "admin"){
             return res.status(404).json({message: "Bạn không có quyền làm việc này!"})
@@ -85,13 +91,13 @@ const checkPermissionCreator = async (req, res, next) => {
             return res.status(400).json({message: "Token rỗng!"})
         }
 
-        const verify_token = jwt.verify(token,process.env?.SECRET_KEY)
+        const verify_token = jwt.verify(token,process.env?.JWT_SECRET)
 
         if(!verify_token){
             return res.status(401).json({message: "Bạn chưa đăng nhập!"})
         }
 
-        const userId = verify_token?.userId
+        const userId = verify_token?._id
 
         const checkUser = await userModel.findById(userId)
 
