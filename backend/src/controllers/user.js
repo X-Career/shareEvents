@@ -27,18 +27,10 @@ const register = async (req, res) => {
             })
         }
 
-<<<<<<< HEAD
-        const userExists = await userModel.find({ email: email, userName: userName, phoneNumber: phoneNumber});
-      
-        
-    
+        const emailExists = await userModel.findOne({ email: email });
         // const userNameExists = await userModel.findOne({ userName: userName });
         // const phoneNumberExists = await userModel.findOne({ phoneNumber: phoneNumber });
-        if (userExists.email) {
-=======
-        const mailExists = await userModel.findOne({email: email});
-        if (mailExists) {
->>>>>>> 119fc097375a4dc6790638d98cdf263cf06ec606
+        if (emailExists) {
             return res.status(400).json({
                 message: "Email này đã được đăng ký, bạn vui lòng nhập email khác!"
          
