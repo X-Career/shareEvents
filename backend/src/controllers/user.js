@@ -1,15 +1,16 @@
 const userModel = require("../models/user.model.js");
-const { loginValidator, registerValidator } = require("../validations/user.js");
+const { loginValidator, registerValidator, updateValidator } = require("../validations/user.js");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const { fields } = require("../cloudinary/index.js");
 
 dotenv.config();
 
 const register = async (req, res) => {
     const fullName = req.body.fullName;
     const gender = req.body.gender;
-    const dayOfBirth = req.body.dayOfBirth;
+    const dateOfBirth = req.body.dateOfBirth;
     const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
     const userName = req.body.userName;
@@ -33,7 +34,7 @@ const register = async (req, res) => {
         if (emailExists) {
             return res.status(400).json({
                 message: "Email này đã được đăng ký, bạn vui lòng nhập email khác!"
-         
+
             })
         }
 
@@ -57,7 +58,7 @@ const register = async (req, res) => {
         const user = await userModel.create({
             fullName,
             gender,
-            dayOfBirth,
+            dateOfBirth,
             image: fileImage?.path,
             email,
             phoneNumber,
@@ -123,7 +124,128 @@ const login = async (req, res) => {
     }
 }
 
+const loadUser = async (req, res) => {
+    try {
+        const idUser = req.params.id;
+        const userData = await userModel.findById(idUser);
+        if (!userData) {
+            return res.status(404).json({ message: "User is not found" });
+        }
+        return res.status(200).json({
+            message: "User is successfully",
+            user: userData,
+        });
+        
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+const updateUser = async (req, res) => {
+    try {
+        const fullName = req.body.fullName;
+        const gender = req.body.gender;
+        const dateOfBirth = req.body.dateOfBirth;
+        const email = req.body.email;
+        const phoneNumber = req.body.phoneNumber;
+        const userName = req.body.userName;
+        const password = req.body.password;
+        const role = req.body.role;
+        const fileImage = req.file;
+
+        let data = {};
+        if(req.body.fullName){
+            data.fullName = req.body.fullName
+        }
+        if(req.body.gender){
+            data.gender = req.body.gender
+        }
+        if(req.body.dateOfBirth){
+            data.dateOfBirth = req.body.dateOfBirth
+        }
+        if(req.body.email){
+            data.email = req.body.email
+        }
+        if(req.body.phoneNumber){
+            data.phoneNumber = req.body.phoneNumber
+        }
+        if(req.body.userName){
+            data.userName = req.body.userName
+        }
+        if(req.body.password){
+            const salt = bcryptjs.genSaltSync();
+            const hash = bcryptjs.hashSync(password, salt);
+            data.password = hash
+        }
+        if(req.body.role){
+            data.role = req.body.role
+        }
+        if(req.file){
+            data.image = fileImage?.path
+        }
+
+
+        const { error } = updateValidator.validate(req.body);
+        if (error) {
+            return res.status(400).json({
+                message: error.details[0].message || "Please re-check your data!",
+            });
+        }
+
+        const emailExists = await userModel.findOne({ email: email });
+        if (emailExists) {
+            return res.status(400).json({
+                message: "Email này đã được đăng ký, bạn vui lòng nhập email khác!"
+
+            })
+        }
+
+        const userNameExists = await userModel.findOne({ userName: userName });
+        if (userNameExists) {
+            return res.status(400).json({
+                message: "Username này đã được đăng ký, bạn vui lòng nhập Username khác!"
+            })
+        }
+
+        const phoneNumberExists = await userModel.findOne({ phoneNumber: phoneNumber });
+        if (phoneNumberExists) {
+            return res.status(400).json({
+                message: "Số điện thoại này đã được đăng ký, bạn vui lòng nhập số điẹn thoại khác!"
+            })
+        }
+
+        console.log(data);
+
+        const idUser = req.params.id;
+
+        console.log('data:' + data);
+        const editedData = await userModel.findByIdAndUpdate(idUser, data, { new: true })
+
+        
+        if (!editedData) {
+            return res.status(404).json({
+                message: "Cập nhật thông tin User không thành công!",
+            });
+        }
+
+        editedData.password = undefined;
+
+        return res.status(200).json({
+            message: "Cập nhật User thành công",
+            data: editedData
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+        });
+    }
+};
+
 module.exports = {
     register,
-    login
+    login,
+    updateUser,
+    loadUser,
 }

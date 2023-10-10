@@ -34,9 +34,9 @@ const Event = mongoose.Schema({
         type: String,
         require: true
     },
-    quantityOfSeat: {
-        type: Number,
-        default: 0
+    price: {
+        type: Array,
+        default: [],
     },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,

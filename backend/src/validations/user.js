@@ -1,12 +1,48 @@
 const Joi = require('joi').extend(require('@joi/date'));
 
+const updateValidator = Joi.object({
+    fullName: Joi.string().messages({
+    }),
+    dateOfBirth: Joi.string().messages({        
+    }),
+    userName: Joi.string().messages({
+    }),
+    phoneNumber: Joi.string().length(10).messages({
+        "string.pattern.base": `Số điện thoại phải có 10 chữ số!`
+    }),
+    email: Joi.string().email().messages({
+        "string.email": "Email không đúng định dạng!"
+    }),
+    password: Joi.string().min(6).messages({
+        "string.min": "Password phải có ít nhất {#limit} ký tự!"
+    }),
+    confirmPassword: Joi.string().valid(Joi.ref("password")).messages({
+        "string.min": "confirmPassword phải có ít nhất {#limit} ký tự!",
+        "any.only": "Mật khẩu nhập lại không khớp!"
+    }),
+    role: Joi.string().messages({
+    })
+});
+
+const loginValidator = Joi.object({
+    userName: Joi.string().required().messages({
+        "string.empty": "userName không được để trống!",
+        "any.required": "Trường \"userName\" là bắt buộc!" 
+    }),
+    password: Joi.string().required().min(6).messages({
+        "string.empty": "Password không được để trống!",
+        "any.required": "Trường \"password\" là bắt buộc!",
+        "string.min": "Password phải có ít nhất {#limit} ký tự!"
+    })
+});
+
 const registerValidator = Joi.object({
     fullName: Joi.string().required().messages({
         "string.empty": "Họ và tên không được để trống!",
         "any.required": "Trường \"fullName\" là bắt buộc!"
     }),
-    dateOfBirth: Joi.date().format("YYYY-MM-DD").utc({
-        "date.pattern.base": "Ngày sinh không đúng định dạng!"
+    dateOfBirth: Joi.string().messages({
+
     }),
     userName: Joi.string().required().messages({
         "string.empty": "userName không được để trống!",
@@ -25,31 +61,18 @@ const registerValidator = Joi.object({
         "any.required": "Trường \"password\" là bắt buộc!",
         "string.min": "Password phải có ít nhất {#limit} ký tự!"
     }),
-    confirmPassword: Joi.string().required().valid(Joi.ref("password")).messages({
+    confirmPassword: Joi.string().valid(Joi.ref("password")).messages({
         "string.empty": "confirmPassword không được để trống!",
         "any.required": "Trường \"confirmPassword\" là bắt buộc!",
         "string.min": "confirmPassword phải có ít nhất {#limit} ký tự!",
         "any.only": "Mật khẩu nhập lại không khớp!"
     }),
-    role: Joi.string().required().messages({
-        "string.empty": "role không được để trống!",
-        "any.required": "Trường \"role\" là bắt buộc!"
-    })
-});
-
-const loginValidator = Joi.object({
-    userName: Joi.string().required().messages({
-        "string.empty": "userName không được để trống!",
-        "any.required": "Trường \"userName\" là bắt buộc!" 
-    }),
-    password: Joi.string().required().min(6).messages({
-        "string.empty": "Password không được để trống!",
-        "any.required": "Trường \"password\" là bắt buộc!",
-        "string.min": "Password phải có ít nhất {#limit} ký tự!"
+    role: Joi.string().messages({
     })
 });
 
 module.exports = {
     registerValidator,
-    loginValidator
+    loginValidator,
+    updateValidator
 }

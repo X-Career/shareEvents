@@ -3,14 +3,15 @@ const mongoose = require('mongoose');
 const User = mongoose.Schema({
     fullName: {
         type: String,
-        required: true
+        require: true
     },
     gender: {
         type: Boolean,
         default: true
     },
-    dayOfBirth: {
-        type: Date,
+    dateOfBirth: {
+        type: String,
+        default: ""
     },
     image: {
         type: String,
