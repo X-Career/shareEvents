@@ -3,7 +3,8 @@ import logo from "./download.png";
 import "./Header.css";
 import { Layout, Menu, Input, Button, Dropdown } from 'antd';
 import { UserOutlined, SearchOutlined, GlobalOutlined } from '@ant-design/icons';
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import { useSelector } from 'react-redux';
 
 const { Header: AntdHeader } = Layout;
 
@@ -22,6 +23,9 @@ const LanguageMenu = (
 );
 
 const Header = () => {
+  const loggedIn = useSelector((state) => state.loggedIn);
+  const userName = useSelector((state) => state.userName);
+
   return (
     <AntdHeader className="header">
       <div className="left-section">
@@ -41,10 +45,16 @@ const Header = () => {
         <div className="createEvent">
           <Button>Create Event</Button>
         </div>
-        <div className="menu">
-          <Link to="/login"><Button type="text">Log In</Button></Link>
-          <Link to="/register"><Button type="text">Sign Up</Button></Link>
-        </div>
+        {loggedIn ? (
+          <div className="menu">
+            <span>{userName}</span>
+          </div>
+        ) : (
+          <div className="menu">
+            <Link to="/login"><Button type="text">Log In</Button></Link>
+            <Link to="/register"><Button type="text">Sign Up</Button></Link>
+          </div>
+        )}
         <div className="user">
           <Dropdown overlay={UserMenu} trigger={['click']}>
             <Button shape="circle" icon={<UserOutlined />} />

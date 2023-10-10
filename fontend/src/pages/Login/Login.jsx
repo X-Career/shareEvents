@@ -2,7 +2,9 @@ import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from 'react-hot-toast';
+// import { toast } from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from "..//..//redux/users/loginSuccess";
 import axios from "axios";
 
 
@@ -10,6 +12,7 @@ import axios from "axios";
 const Login = () => {
   const API_Login = "http://localhost:3001/user/login";
   const navigate = useNavigate ()
+  const dispatch = useDispatch();
   const onFinish = async (values) => {
     try {
       const { userName, password } = values;
@@ -20,6 +23,8 @@ const Login = () => {
         console.log("Đăng nhập thành công!");
         alert(response.data.message);
         console.log(response.data);
+        dispatch(loginSuccess(userName));
+
         navigate ("/")
 
       } else {
