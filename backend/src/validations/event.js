@@ -28,8 +28,7 @@ const eventValidator = Joi.object({
         "string.empty": "paymentOfMethod không được để trống!",
         "any.required": "Trường \"paymentOfMethod\" là bắt buộc!"
     }),
-    quantityOfSeat: Joi.number().required().messages({
-        "string.empty": "quantityOfSeat không được để trống!",
+    price: Joi.array().required().messages({
         "any.required": "Trường \"quantityOfSeat\" là bắt buộc!"
     }),
     categories: Joi.array().required().messages({
