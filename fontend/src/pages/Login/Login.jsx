@@ -4,7 +4,7 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 // import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
-import { loginSuccess } from "..//..//redux/users/loginSuccess";
+import { loginAction } from "../../redux/users/loginAction";
 import axios from "axios";
 
 
@@ -23,7 +23,9 @@ const Login = () => {
         console.log("Đăng nhập thành công!");
         alert(response.data.message);
         console.log(response.data);
-        dispatch(loginSuccess(userName));
+        dispatch(loginAction(userName));
+        console.log(response.data)
+   
 
         navigate ("/")
 
