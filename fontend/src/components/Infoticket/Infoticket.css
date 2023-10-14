@@ -1,0 +1,40 @@
+.info-ticket {
+
+    font-weight: 700;
+    text-align: left;
+    color: #333;
+    width: 670px;
+    margin: 0px 40px;
+    font-size: 13px;
+}
+
+.tiket-day {
+    padding-left: 2em;
+    text-indent: -1.5em;
+    margin-bottom: 0;
+    color: #333;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.ticket-address {
+    border: none;
+}
+
+.tk1 {
+    padding-left: 2em;
+    text-indent: -1.5em;
+    margin-bottom: 0;
+    font-size: 16px;
+    color: #333;
+    font-weight: 700;
+}
+
+.tk2 {
+    color: grey;
+    padding: 0px 7px;
+}
+
+.p {
+    margin: 0 0 10px;
+}

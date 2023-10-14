@@ -21,7 +21,7 @@ const Contents = () => {
         <div className="product-list">
           {products.map((product) => (
             <div className="product-item" key={product.id}>
-              <Link to="/event/:_id" className="event-details">
+              <Link to={`/event/${product.id}`} className="event-details">
                 <img
                   className="product-image"
                   src={product.image}
