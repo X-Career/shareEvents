@@ -18,11 +18,11 @@ const Seat = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    events: {
+    events: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "event",
         require: true,
-    }
+    }],
 }, {
     versionKey: false,
     timestamps: true,

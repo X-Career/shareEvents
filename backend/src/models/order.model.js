@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const Order = mongoose.Schema({
     status: {
         type: String,
-        require: true
+        require: true,
+        default: "chưa thanh toán"
     },
     amount: {
         type: String,
@@ -17,7 +18,7 @@ const Order = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "event"
     },
-    users: {
+    customers: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user",
         require: true

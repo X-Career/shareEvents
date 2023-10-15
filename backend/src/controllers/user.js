@@ -29,8 +29,6 @@ const register = async (req, res) => {
         }
 
         const emailExists = await userModel.findOne({ email: email });
-        // const userNameExists = await userModel.findOne({ userName: userName });
-        // const phoneNumberExists = await userModel.findOne({ phoneNumber: phoneNumber });
         if (emailExists) {
             return res.status(400).json({
                 message: "Email này đã được đăng ký, bạn vui lòng nhập email khác!"
@@ -216,7 +214,7 @@ const updateUser = async (req, res) => {
             })
         }
 
-        console.log(data);
+        // console.log(data);
 
         const idUser = req.params.id;
 
@@ -243,9 +241,33 @@ const updateUser = async (req, res) => {
     }
 };
 
+const deleteUser = async (req, res) => {
+    try {
+        const idUser = req.params.id;
+
+        const data = await userModel.findByIdAndDelete(idUser);
+
+        if (!data) {
+            return res.status(404).json({
+              message: "Deleting user is not successful",
+            });
+          }
+          return res.status(200).json({
+            message: "Deleting user is successful",
+            data,
+          });
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+        });    
+    }
+};
+
 module.exports = {
     register,
     login,
     updateUser,
     loadUser,
+    deleteUser,
 }
