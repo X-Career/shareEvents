@@ -218,7 +218,7 @@ const updateUser = async (req, res) => {
 
         const idUser = req.params.id;
 
-        console.log('data:' + data);
+        // console.log('data:' + data);
         const editedData = await userModel.findByIdAndUpdate(idUser, data, { new: true })
 
         

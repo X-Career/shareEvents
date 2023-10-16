@@ -49,6 +49,22 @@ const getDetailEvent = async (req, res) => {
     }
 };
 
+const getEventById = async (req, res) => {
+    try {
+        const idEvent = req.params.id;
+        const eventData = await eventModel.findById(idEvent);
+        if (!eventData) {
+            return res.status(404).json({ message: "Event is not found" });
+        }
+        return res.status(200).json({
+            message: "Event is successfully",
+            event: eventData,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
 const createEvent = async (req, res) => {
     try {
         const data = req.body;
@@ -67,10 +83,10 @@ const createEvent = async (req, res) => {
         const event = await eventModel.create({
             ...data,
             creator: user,
-            image: fileImages?.path
+            image: [fileImages?.path]
         });
 
-        console.log(event)
+        // console.log(event)
 
         if (!event) {
             return res.status(404).json({
@@ -101,26 +117,70 @@ const createEvent = async (req, res) => {
 };
 
 const updateEvent = async (req, res) => {
+    try {
+        const data = req.body;
+        const idEvent = req.params.id;
 
+        const { error } = eventValidator.validate(data);
+        if (error) {
+            return res.status(400).json({
+                message: error.details[0].message || "Please re-check your data!",
+            });
+        }
+
+        // console.log('data:' + data);
+        const editedData = await eventModel.findByIdAndUpdate(idEvent, data, { new: true })
+
+        if (!editedData) {
+            return res.status(404).json({
+                message: "Cập nhật Event không thành công!",
+            });
+        }
+
+        const updateCategories = await categoryModel.findByIdAndUpdate(editedData.categories, {
+            $addToSet: {
+                events: editedData._id,
+            },
+        });
+
+        if (!updateCategories) {
+            return res.status(404).json({
+                message: "Cập nhật category cho sự kiện không thành công!",
+            });
+        }
+
+        return res.status(200).json({
+            message: "Cập nhật Event thành công",
+            data: editedData
+        });
+
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
 };
 
 const deleteEvent = async (req, res) => {
     try {
         const idEvent = req.params.id;
-        
-            const data = await eventModel.findByIdAndDelete(idEvent);
-
-            if (!data) {
-                return res.status(404).json({
-                    message: "Deleting event is not successful",
-                });
-            }
-            return res.status(200).json({
-                message: "Deleting event is successful",
-                data,
+        const dataEvent = await eventModel.find({ _id: idEvent }, { status: "Draft" }, { orders: [] });
+        if (!dataEvent) {
+            return res.status(400).json({
+                message: "Bạn không thể xoá sự kiện, khi chưa hoàn tiền vé hoặc Sự kiện của bạn đang trong tình trạng publish!"
+            })
+        }
+        const data = await eventModel.findByIdAndDelete(idEvent);
+        if (!data) {
+            return res.status(404).json({
+                message: "Deleting event is not successful",
             });
-        
-
+        }
+        return res.status(200).json({
+            message: "Deleting event is successful",
+            data,
+        });
     } catch (error) {
         return res.status(500).json({
             message: error.message,
@@ -131,6 +191,7 @@ const deleteEvent = async (req, res) => {
 module.exports = {
     getList,
     getDetailEvent,
+    getEventById,
     createEvent,
     updateEvent,
     deleteEvent
