@@ -4,6 +4,7 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const { fields } = require("../cloudinary/index.js");
+const cloudinary = require("cloudinary").v2;
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ const register = async (req, res) => {
         const { error } = registerValidator.validate(req.body, { abortEarly: false })
 
         if (error) {
+            if(fileImage) cloudinary.uploader.destroy(fileImage.filename);
             const errors = error.details.map((err => err.message))
             return res.status(400).json({
                 message: errors
@@ -73,6 +75,7 @@ const register = async (req, res) => {
             user
         });
     } catch (error) {
+        if(fileImage) cloudinary.uploader.destroy(fileImage.filename);
         return res.status(500).json({
             name: error.name,
             message: error.message
@@ -187,6 +190,7 @@ const updateUser = async (req, res) => {
 
         const { error } = updateValidator.validate(req.body);
         if (error) {
+            if(fileImage) cloudinary.uploader.destroy(fileImage.filename);
             return res.status(400).json({
                 message: error.details[0].message || "Please re-check your data!",
             });
@@ -235,6 +239,7 @@ const updateUser = async (req, res) => {
             data: editedData
         });
     } catch (error) {
+        if(fileImage) cloudinary.uploader.destroy(fileImage.filename);
         return res.status(500).json({
             message: error.message,
         });

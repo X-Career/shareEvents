@@ -69,9 +69,9 @@ const createEvent = async (req, res) => {
     try {
         const data = req.body;
         const user = req.user?._id;
-        const fileImages = req.files;
+        const fileImages = req.files.map(file => file.path);
 
-        // console.log("event:", data)
+        // console.log("image:", fileImages)
 
         const { error } = eventValidator.validate(data);
         if (error) {
@@ -83,7 +83,7 @@ const createEvent = async (req, res) => {
         const event = await eventModel.create({
             ...data,
             creator: user,
-            image: [fileImages?.path]
+            image: fileImages
         });
 
         // console.log(event)
@@ -107,7 +107,7 @@ const createEvent = async (req, res) => {
         }
         return res.status(200).json({
             message: "Bạn đã tạo sự kiện thành công!",
-            events: data,
+            events: event,
         });
 
 
@@ -120,41 +120,58 @@ const updateEvent = async (req, res) => {
     try {
         const data = req.body;
         const idEvent = req.params.id;
+        const fileImages = req.files;
 
-        const { error } = eventValidator.validate(data);
-        if (error) {
-            return res.status(400).json({
-                message: error.details[0].message || "Please re-check your data!",
+        if (req.body) {
+            const { error } = eventValidator.validate(data);
+            if (error) {
+                return res.status(400).json({
+                    message: error.details[0].message || "Please re-check your data!",
+                });
+            }
+
+            // console.log('data:' + data);
+            const editedData = await eventModel.findByIdAndUpdate(idEvent, data, { new: true })
+
+            if (!editedData) {
+                return res.status(404).json({
+                    message: "Cập nhật Event không thành công!",
+                });
+            }
+
+            const updateCategories = await categoryModel.findByIdAndUpdate(editedData.categories, {
+                $addToSet: {
+                    events: editedData._id,
+                },
             });
-        }
 
-        // console.log('data:' + data);
-        const editedData = await eventModel.findByIdAndUpdate(idEvent, data, { new: true })
+            if (!updateCategories) {
+                return res.status(404).json({
+                    message: "Cập nhật category cho sự kiện không thành công!",
+                });
+            }
 
-        if (!editedData) {
-            return res.status(404).json({
-                message: "Cập nhật Event không thành công!",
+            return res.status(200).json({
+                message: "Cập nhật Event thành công",
+                data: editedData
             });
+
         }
+        if (req.files) {
+            const editedData = await eventModel.findByIdAndUpdate(idEvent, { $push: { image: { $each: req.files.map(element => element.path) } } }, { new: true })
 
-        const updateCategories = await categoryModel.findByIdAndUpdate(editedData.categories, {
-            $addToSet: {
-                events: editedData._id,
-            },
-        });
+            if (!editedData) {
+                return res.status(404).json({
+                    message: "Cập nhật Event không thành công!",
+                });
+            }
 
-        if (!updateCategories) {
-            return res.status(404).json({
-                message: "Cập nhật category cho sự kiện không thành công!",
+            return res.status(200).json({
+                message: "Cập nhật Event thành công",
+                data: editedData
             });
+
         }
-
-        return res.status(200).json({
-            message: "Cập nhật Event thành công",
-            data: editedData
-        });
-
-
     } catch (error) {
         return res.status(500).json({
             message: error.message

@@ -1,3 +1,4 @@
+const { array } = require('joi');
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
@@ -18,11 +19,11 @@ const Event = mongoose.Schema({
         type: String,
         require: true
     },
-    image: [{
-        type: String,
-        default: "",
+    image: {
+        type: Array,
+        default: [],
         require: true
-    }],
+    },
     location: {
         type: String,
         require: true
@@ -40,10 +41,10 @@ const Event = mongoose.Schema({
         type: String,
         require: true
     },
-    price: [{
-        type: String,
+    price: {
+        type: Array,
         default: [],
-    }],
+    },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "commnet"
