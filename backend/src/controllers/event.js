@@ -6,6 +6,7 @@ const seatModel = require("../models/seat.model");
 const { eventValidator } = require("../validations/event.js");
 const dotenv = require("dotenv");
 const { query } = require("express");
+const cloudinary = require("cloudinary").v2;
 
 dotenv.config();
 
@@ -41,18 +42,10 @@ const getList = async (req, res) => {
     }
 };
 
-const getDetailEvent = async (req, res) => {
-    try {
-
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-};
-
 const getEventById = async (req, res) => {
     try {
         const idEvent = req.params.id;
-        const eventData = await eventModel.findById(idEvent);
+        const eventData = await eventModel.findById(idEvent).populate("categories").populate("comments");
         if (!eventData) {
             return res.status(404).json({ message: "Event is not found" });
         }
@@ -75,6 +68,7 @@ const createEvent = async (req, res) => {
 
         const { error } = eventValidator.validate(data);
         if (error) {
+            cloudinary.api.delete_resources(fileImages);
             return res.status(400).json({
                 message: error.details[0].message || "Bạn vui lòng kiểm tra lại dữ liệu!",
             });
@@ -89,6 +83,7 @@ const createEvent = async (req, res) => {
         // console.log(event)
 
         if (!event) {
+            cloudinary.api.delete_resources(fileImages);
             return res.status(404).json({
                 message: "Bạn tạo sự kiện không thành công!",
             });
@@ -112,6 +107,7 @@ const createEvent = async (req, res) => {
 
 
     } catch (error) {
+        cloudinary.api.delete_resources(fileImages);
         return res.status(500).json({ message: error.message });
     }
 };
@@ -161,6 +157,7 @@ const updateEvent = async (req, res) => {
             const editedData = await eventModel.findByIdAndUpdate(idEvent, { $push: { image: { $each: req.files.map(element => element.path) } } }, { new: true })
 
             if (!editedData) {
+                cloudinary.api.delete_resources(fileImages);
                 return res.status(404).json({
                     message: "Cập nhật Event không thành công!",
                 });
@@ -173,6 +170,7 @@ const updateEvent = async (req, res) => {
 
         }
     } catch (error) {
+        cloudinary.api.delete_resources(fileImages);
         return res.status(500).json({
             message: error.message
         });
@@ -207,7 +205,6 @@ const deleteEvent = async (req, res) => {
 
 module.exports = {
     getList,
-    getDetailEvent,
     getEventById,
     createEvent,
     updateEvent,

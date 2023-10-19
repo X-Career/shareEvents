@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const { getList, getDetailEvent, getEventById, createEvent, updateEvent, deleteEvent } = require('../controllers/event.js');
+const { getList, getEventById, createEvent, updateEvent, deleteEvent } = require('../controllers/event.js');
 const { authentication, checkPermissionAdmin, checkPermissionCreator } = require('../middlewares/authentication.js');
 const uploadImage = require('../cloudinary/index.js');
 
 router.get('/', getList);
-router.get('/:id', getDetailEvent);
+router.get('/:id', getEventById);
 router.post('/createEvent', checkPermissionCreator, uploadImage.array("image", 10), createEvent);
 router.put('/updateEvent/:id', checkPermissionCreator, uploadImage.array("image", 10), updateEvent);
 router.delete('/deleteEvent/:id', checkPermissionCreator, deleteEvent);

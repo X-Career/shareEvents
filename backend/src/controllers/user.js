@@ -227,6 +227,7 @@ const updateUser = async (req, res) => {
 
         
         if (!editedData) {
+            if(fileImage) cloudinary.uploader.destroy(fileImage.filename);
             return res.status(404).json({
                 message: "Cập nhật thông tin User không thành công!",
             });
