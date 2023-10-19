@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import "./Event.css"
+import { useParams } from 'react-router-dom';
 import Calender from '../../components/Calender/Calender';
 import Infoticket from '../../components/Infoticket/Infoticket';
 import { products } from '../../components/Products/Products';
 import Watchmore from '../../components/Watchmore/watchmore';
+import RightPage from '../../components/Rightpage/RightPage';
 import { FacebookOutlined, HeartOutlined } from '@ant-design/icons'
 const data = [
   {
@@ -40,10 +42,28 @@ const data = [
 ];
 
 const Event = () => {
+  const [product, setProduct] = useState([]);
+  const { id } = useParams();
+  const findProduct = (id) => {
+    const res = products.filter(i => i.id == id)
+    console.log('res', res);
+    if (res.length > 0) {
+      setProduct(res[[0]])
+    }
+  }
+  useEffect(() => {
+    console.log('id', id);
+    findProduct(id)
+  }, [id]);
+  console.log('product', product)
   return (
     <div className='event-detail-container'>
       <div className='nav-pic'>
-        
+        {!product ?
+          <h2>Not found product!</h2>
+          :
+          <h2>Name Product: <span>{product?.image}</span></h2>
+        }
       </div>
       <div className='ticket'>
         <Calender />
@@ -60,21 +80,24 @@ const Event = () => {
             <span className='label-3'>-- followers</span>
           </a>
         </div>
+      </div>
+      <div className='select'>
+        <div className='list-info-ticket'>
+          <h3 className='title'>TICKET INFORMATION</h3>
+          {
+            data.map((item) => {
+              return (
+                <div className='info' key={item.key}>
+                  <p className='word-p'>{item.name}</p>
+                  <strong className='price'>{item.price}</strong>
+                </div>
+              )
+            })
+          }
+        </div> 
+        <RightPage />
+      </div>
 
-      </div>
-      <div className='list-info-ticket'>
-        <h3 className='title'>TICKET INFORMATION</h3>
-        {
-          data.map((item) => {
-            return (
-              <div className='info' key={item.key}>
-                <p className='word-p'>{item.name}</p>
-                <strong className='price'>{item.price}</strong>
-              </div>
-            )
-          })
-        }
-      </div>
       <Watchmore />
     </div>
   )

@@ -112,3 +112,6 @@
 .event-detail-container{
     background-color: #f5f1f1;
 }
+.select{
+    display: flex;
+}
