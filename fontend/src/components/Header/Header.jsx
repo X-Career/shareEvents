@@ -10,18 +10,22 @@ import {
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutAction } from "../../redux/users/logoutAction";
+
 const { Header: AntdHeader } = Layout;
 
 const Header = () => {
   const loggedIn = useSelector((state) => state.loggedIn);
   const userName = useSelector((state) => state.userName);
   const userAvatar = useSelector((state) => state.image);
+
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     dispatch(logoutAction());
     console.log(handleLogout);
   };
+
+
   const UserMenu = (
     <Menu>
       <Menu.Item key="profile">Profile</Menu.Item>
@@ -40,7 +44,8 @@ const Header = () => {
       </Menu.Item>
     </Menu>
   );
-  const userImg = loggedIn ? <Avatar src={userAvatar} /> : <UserOutlined/>
+  const userImg = loggedIn ? <Avatar src= { userAvatar } />  : <UserOutlined/>
+  console.log(userImg)
 
   return (
     <AntdHeader className="header">
@@ -63,7 +68,8 @@ const Header = () => {
       </div>
       <div className="right-section">
         <div className="createEvent">
-          <Button>Create Event</Button>
+          <Link to="/createAnEvent"><Button>Create Event</Button></Link>
+          
         </div>
         {loggedIn ? (
           <div className="menu">
@@ -82,7 +88,7 @@ const Header = () => {
         <div className="user">
         
           <Dropdown overlay={UserMenu} trigger={["click"]}>
-            <Button shape="circle" icon={userImg} />
+            <Button shape="circle" icon={userImg} /> 
           </Dropdown>
         </div>
         <div className="language">
@@ -93,7 +99,6 @@ const Header = () => {
           >
             <Button shape="circle" icon={<GlobalOutlined />} />
           </Dropdown>
-          
         </div>
       </div>
     </AntdHeader>
