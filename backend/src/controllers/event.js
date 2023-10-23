@@ -123,45 +123,55 @@ const updateEvent = async (req, res) => {
         const data = req.body;
         const idEvent = req.params.id;
         const fileImages = req.files;
+        const userLogin = req.user?._id;
 
-        if (req.body) {
-            const { error } = eventValidator.validate(data);
-            if (error) {
-                return res.status(400).json({
-                    message: error.details[0].message || "Please re-check your data!",
+        const event = await eventModel.findById(idEvent);
+        const isEqualCreatorEvent = event.creator._id.equals(userLogin);
+
+        if (isEqualCreatorEvent) {
+
+            if (req.body) {
+                const { error } = eventValidator.validate(data);
+                if (error) {
+                    return res.status(400).json({
+                        message: error.details[0].message || "Please re-check your data!",
+                    });
+                }
+
+                // console.log('data:' + data);
+                const editedData = await eventModel.findByIdAndUpdate(idEvent, data, { new: true })
+
+                if (!editedData) {
+                    return res.status(404).json({
+                        message: "Cập nhật Event không thành công!",
+                    });
+                }
+
+                return res.status(200).json({
+                    message: "Cập nhật Event thành công",
+                    data: editedData
+                });
+
+            }
+            if (req.files) {
+                const editedData = await eventModel.findByIdAndUpdate(idEvent, { $push: { image: { $each: req.files.map(element => element.path) } } }, { new: true })
+
+                if (!editedData) {
+                    cloudinary.api.delete_resources(fileImages);
+                    return res.status(404).json({
+                        message: "Cập nhật Event không thành công!",
+                    });
+                }
+
+                return res.status(200).json({
+                    message: "Cập nhật Event thành công",
+                    data: editedData
                 });
             }
-
-            // console.log('data:' + data);
-            const editedData = await eventModel.findByIdAndUpdate(idEvent, data, { new: true })
-
-            if (!editedData) {
-                return res.status(404).json({
-                    message: "Cập nhật Event không thành công!",
-                });
-            }
-
-            return res.status(200).json({
-                message: "Cập nhật Event thành công",
-                data: editedData
-            });
-
         }
-        if (req.files) {
-            const editedData = await eventModel.findByIdAndUpdate(idEvent, { $push: { image: { $each: req.files.map(element => element.path) } } }, { new: true })
-
-            if (!editedData) {
-                cloudinary.api.delete_resources(fileImages);
-                return res.status(404).json({
-                    message: "Cập nhật Event không thành công!",
-                });
-            }
-
-            return res.status(200).json({
-                message: "Cập nhật Event thành công",
-                data: editedData
-            });
-        }
+        return res.status(400).json({
+            message: "Bạn không có quyền cập nhật Event này!"
+        })
     } catch (error) {
         cloudinary.api.delete_resources(fileImages);
         return res.status(500).json({
