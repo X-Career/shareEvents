@@ -45,14 +45,20 @@ const getList = async (req, res) => {
 const getEventById = async (req, res) => {
     try {
         const idEvent = req.params.id;
-        const eventData = await eventModel.findById(idEvent).populate("categories").populate("comments");
+        const commentsData = await commentModel.find({ events: idEvent, status: "active" }).populate("customers").sort({ createdAt: "desc" });
+        console.log(commentsData)
+
+        const eventData = await eventModel.findById(idEvent).populate("categories");
         if (!eventData) {
             return res.status(404).json({ message: "Event is not found" });
         }
+        eventData.comments = commentsData;
+
         return res.status(200).json({
             message: "Event is successfully",
-            event: eventData,
+            event: eventData
         });
+
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -62,7 +68,7 @@ const createEvent = async (req, res) => {
     try {
         const data = req.body;
         const user = req.user?._id;
-        const fileImages = req.files.map(file => file.path);
+        const fileImages = req.files?.map(file => file.path);
 
         // console.log("image:", fileImages)
 
@@ -135,18 +141,6 @@ const updateEvent = async (req, res) => {
                 });
             }
 
-            const updateCategories = await categoryModel.findByIdAndUpdate(editedData.categories, {
-                $addToSet: {
-                    events: editedData._id,
-                },
-            });
-
-            if (!updateCategories) {
-                return res.status(404).json({
-                    message: "Cập nhật category cho sự kiện không thành công!",
-                });
-            }
-
             return res.status(200).json({
                 message: "Cập nhật Event thành công",
                 data: editedData
@@ -167,7 +161,6 @@ const updateEvent = async (req, res) => {
                 message: "Cập nhật Event thành công",
                 data: editedData
             });
-
         }
     } catch (error) {
         cloudinary.api.delete_resources(fileImages);
@@ -180,7 +173,7 @@ const updateEvent = async (req, res) => {
 const deleteEvent = async (req, res) => {
     try {
         const idEvent = req.params.id;
-        const dataEvent = await eventModel.find({ _id: idEvent }, { status: "Draft" }, { orders: [] });
+        const dataEvent = await eventModel.find({ _id: idEvent, status: "Draft", orders: [] });
         if (!dataEvent) {
             return res.status(400).json({
                 message: "Bạn không thể xoá sự kiện, khi chưa hoàn tiền vé hoặc Sự kiện của bạn đang trong tình trạng publish!"
