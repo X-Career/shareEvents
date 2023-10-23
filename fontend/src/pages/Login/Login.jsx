@@ -22,8 +22,8 @@ const Login = () => {
         
 
         // const { image } = response.data.user.image;
-        console.log (response.data.user)
-        dispatch(loginAction(response.data.user.userName, response.data.user.image));
+        console.log (response.data)
+        dispatch(loginAction(response.data.user.userName, response.data.user.image, response.data.accessToken));
 
         navigate("/");
       } else {

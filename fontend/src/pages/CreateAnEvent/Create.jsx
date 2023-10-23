@@ -1,23 +1,56 @@
 import { PlusOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
-import Price from './Price'
+import axios from 'axios';
+import Price from './Price';
 import "./Create.css";
 import { Button, Cascader, DatePicker, Form, Input, InputNumber, Radio, Select, Slider, Switch, TreeSelect, Upload } from 'antd';
+import { useSelector, useDispatch } from "react-redux";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-const normFile = (e) => {
-  if (Array.isArray(e)) {
-    return e;
-  }
-  return e?.fileList;
-};
+// const normFile = (e) => {
+//   if (Array.isArray(e)) {
+//     return e;
+//   }
+//   return e?.fileList;
+// };
 
 const createAnEvent = () => {
+const accessToken = useSelector((state)=> state.accessToken)
+const API_RegisterEvent = "http://localhost:3001/event/createEvent"
   const [form] = Form.useForm();
+  const [errorVisible, setErrorVisible] = useState(false);
 
-  const onFinish = (values) => {
-    console.log(values);
+  const onFinish = async (values) => {
+    try {
+        await axios.post(API_RegisterEvent, values,{
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        });
+        console.log('Form sent successfully!');
+      } catch (error) {
+        if (error.response && error.response.data) {
+          console.error('Error sending form:', error.response.data.message);
+        } else {
+          console.error('Unexpected error:', error);
+        }
+      }
+      
+    
+  };
+
+  const checkEventTime = (_, value) => {
+    const [startTime, endTime] = value;
+    const eventTime = form.getFieldValue('eventTime');
+
+    if (startTime && endTime && (startTime > eventTime || endTime > eventTime)) {
+      setErrorVisible(true);
+      return Promise.reject(new Error('Thời gian mở/ngừng bán vé không được sau thời gian tổ chức sự kiện!'));
+    }
+
+    setErrorVisible(false);
+    return Promise.resolve();
   };
 
   return (
@@ -42,49 +75,61 @@ const createAnEvent = () => {
         <Form.Item
           label="Thời Gian mở/ngừng bán vé"
           name="saleTime"
-          rules={[{ required: true, message: 'Vui lòng chọn thời gian mở và ngừng bán vé!' }]}
-        >
-          <RangePicker showTime />
-        </Form.Item>
-
-        <Form.Item
-          label="Tên chương trình"
-          name="name"
-          rules={[{ required: true, message: 'Vui lòng nhập tên chương trình!' }]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Địa điểm"
-          name="location"
-          rules={[{ required: true, message: 'Vui lòng nhập địa điểm!' }]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Hình ảnh"
-          name="image"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-          rules={[{ required: true, message: 'Vui lòng chọn hình ảnh!' }]}
-        >
-          <Upload action="/upload.do" listType="picture-card">
-            <div>
-              <PlusOutlined />
-              <div style={{ marginTop: 8 }}>Upload</div>
-            </div>
-          </Upload>
-        </Form.Item>
-
-        <Form.Item
+          rules={[
+            { required: true, message: 'Vui lòng chọn thời gian mở và ngừng bán vé!' },
+            { validator: checkEventTime }
+          ]}
+          validateStatus={errorVisible ? 'error' : ''}
+          help={errorVisible ? 'Thời gian mở/ngừng bán vé không hợp lệ.' : ''}
+          >
+            <RangePicker showTime />
+          </Form.Item>
+  
+          <Form.Item
+            label="Tên chương trình"
+            name="name"
+            rules={[{ required: true, message: 'Vui lòng nhập tên chương trình!' }]}
+          >
+            <Input />
+          </Form.Item>
+  
+          <Form.Item
+            label="Địa điểm"
+            name="location"
+            rules={[{ required: true, message: 'Vui lòng nhập địa điểm!' }]}
+          >
+            <Input />
+          </Form.Item>
+  
+          {/* <Form.Item
+            label="Hình ảnh"
+            name="image"
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
+            rules={[{ required: true, message: 'Vui lòng chọn hình ảnh!' }]}
+          >
+            <Upload action="http://localhost:3001/event/createEvent" listType="picture-card">
+              <div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </div>
+            </Upload>
+          </Form.Item> */}
+          <Form.Item
           label="Thông tin"
           name="imformation"
           rules={[{ required: true, message: 'Vui lòng nhập thông tin!' }]}
         >
           <TextArea rows={4} />
         </Form.Item>
+        <Form.Item
+          label="Giá vé"
+          name="price"
+          rules={[{ required: true, message: 'Vui lòng nhập giá vé!' }]}
+        >
+          <InputNumber />
+        </Form.Item>
+   
         <Form.Item
           label="Phương thức thanh toán"
           name="paymentOfMethod"
