@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import "./Event.css"
 import { useParams } from 'react-router-dom';
-import Calender from '../../components/Calender/Calender';
-import Infoticket from '../../components/Infoticket/Infoticket';
-import { products } from '../../components/Products/Products';
 import Watchmore from '../../components/Watchmore/watchmore';
-import RightPage from '../../components/Rightpage/RightPage';
-import { FacebookOutlined, HeartOutlined } from '@ant-design/icons'
+import {
+  FacebookOutlined, HeartOutlined, ClockCircleOutlined,
+  CaretDownOutlined,CopyrightOutlined
+} from '@ant-design/icons'
 const data = [
   {
     key: '1',
@@ -45,21 +44,41 @@ const Event = () => {
   const [product, setProduct] = useState([]);
   const { id } = useParams();
 
-  useEffect(() =>{
-    const getProduct = async() =>{
-      const response = await fetch (`http://localhost:3001/events/${id}`);
+  useEffect(() => {
+    const getProduct = async () => {
+      const response = await fetch(`http://localhost:3001/events/${id}`);
       setProduct(await response.json());
     }
     getProduct();
-  },[id])
+  }, [id])
   return (
     <div className='event-detail-container'>
       <div className='nav-pic'>
         {product.image}
       </div>
       <div className='ticket'>
-        <Calender />
-        <Infoticket />
+        <div className='calendar'>
+          <div className='month'>Octorber</div>
+          <div className='date'>21</div>
+          <div className='day'>Saturday</div>
+        </div>
+        <div className='info-ticket'>
+          <div className='title-ticket'>
+            <h1>2023-2024 BamBam THE 1ST WORLD TOUR
+              [AREA 52] in HO CHI MINH</h1>
+          </div>
+          <div className='tiket-day'>
+            <p>Saturday, 21 October 2023
+              (07:00 PM - Until late)</p>
+          </div>
+          <div className='ticket-address'>
+            <p className='tk1'><ClockCircleOutlined />Nguyen Du Gymnasium</p>
+            <p className='tk2'>
+              <CaretDownOutlined />
+              116 Nguyen Du, Ben Thanh Ward, District 1, HCMC
+            </p>
+          </div>
+        </div>
         <div className='book-now'>
           <a style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <span className='label-book'>Book now</span>
@@ -86,8 +105,42 @@ const Event = () => {
               )
             })
           }
-        </div> 
-        <RightPage />
+        </div>
+        <div className='contain-all'>
+          <div className='mini-word'>
+            <h2 className='word'>2023-2024 BamBam THE 1ST WORLD TOUR [AREA 52] In HO CHI MINH</h2>
+          </div>
+          <div className='info-t'>
+            <div className='time'>
+              <ClockCircleOutlined />
+              <span className='time-line'>
+                07:00 PM - Until late
+              </span>
+            </div>
+            <div className='address'>
+              <CaretDownOutlined />
+              <p className='street'>
+                Nguyen Du Gymnasium<br />
+                116 Nguyen Du, Ben Thanh Ward, District 1, HCMC
+              </p>
+            </div>
+          </div>
+          <div className='price'>
+            <CopyrightOutlined />
+            <span className='price-s'>From <strong>1,400,000 VND</strong></span>
+          </div>
+          <div className='book-nows'>
+            <a style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <span className='label-book'>Book now</span>
+              <div className='text'>
+                <span className='label-1'><FacebookOutlined />Share to facebook</span>
+                <span className='label-2'>
+                  <HeartOutlined /> Follow
+                </span>
+              </div>
+            </a>
+          </div>
+        </div>
       </div>
 
       <Watchmore />
