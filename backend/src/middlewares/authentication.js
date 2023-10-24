@@ -62,10 +62,10 @@ const checkPermissionAdmin = async (req, res, next) => {
 
         const checkUser = await userModel.findById(userId)
 
-        console.log(checkUser);
+        // console.log(checkUser);
 
         if(!checkUser || checkUser.role !== "admin"){
-            return res.status(404).json({message: "Bạn không có quyền làm việc này!"})
+            return res.status(404).json({message: "Bạn không có quyền làm việc này!"});
         }
 
         req.user = checkUser;
@@ -101,7 +101,7 @@ const checkPermissionCreator = async (req, res, next) => {
 
         const checkUser = await userModel.findById(userId)
 
-        if(!checkUser || checkUser.role !== "creator"){
+        if(!checkUser || checkUser.role !== "creator" && checkUser.role !== "admin"){
             return res.status(404).json({message: "Bạn không có quyền làm việc này!"})
         }
 

@@ -10,7 +10,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import usersReducer from "./users/usersReducer";
+import loginReducer from "./users/loginReducer";
 
 const persistConfig = {
   key: "root",
@@ -18,12 +18,16 @@ const persistConfig = {
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, usersReducer);
+const persistedReducer = persistReducer(persistConfig, loginReducer);
 
 export const storeRedux = configureStore({
-  reducer: persistedReducer
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+  getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }),
 });
 
-
 export let persistor = persistStore(storeRedux);
-

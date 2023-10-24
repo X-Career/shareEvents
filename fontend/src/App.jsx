@@ -8,6 +8,7 @@ import AppHeader from './components/Header/Header';
 import Events from './pages/Events/Events';
 import Event from './pages/Event/Event';
 import SuccessPage from './pages/Users/SuccessPage';
+import EventRegistrationForm from './pages/CreateAnEvent/Create';
 // import { Footer, Header } from 'antd/es/layout/layout';
 
 
@@ -48,6 +49,10 @@ import SuccessPage from './pages/Users/SuccessPage';
         {
           path: "/success",
           element: <SuccessPage />,
+        },
+        {
+          path: "/createAnEvent",
+          element: <EventRegistrationForm />,
         }
       ],
     },

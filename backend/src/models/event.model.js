@@ -1,16 +1,22 @@
+const { array } = require('joi');
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const Event = mongoose.Schema({
-    name: {
+    nameE: {
         type: String,
-        required: true
+        require: true
     },
-    staringTime: {
-        type: Date,
+    time: {
+        type: String,
         require: true
     },
     endingTime: {
-        type: Date,
+        type: String,
+        require: true
+    },
+    startingTime: {
+        type: String,
         require: true
     },
     image: {
@@ -24,9 +30,10 @@ const Event = mongoose.Schema({
     },
     status: {
         type: String,
-        require: true
+        require: true,
+        default: "Draft"
     },
-    imformation: {
+    information: {
         type: String,
         require: true,
     },
@@ -40,27 +47,33 @@ const Event = mongoose.Schema({
     },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "commnet",
-        require: true,
+        ref: "comment"
     }],
-    categories: [{
+    categories: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "category",
         require: true,
         default: "Uncategorized"
-    }],
+    },
     seats: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "seat",
+        require: true
     }],
-    users: {
+    creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user",
         require: true
     },
+    orders: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "order"
+    }]
 }, {
     versionKey: false,
     timestamps: true,
 })
+
+Event.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("event", Event)

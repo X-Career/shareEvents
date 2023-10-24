@@ -4,6 +4,7 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const { fields } = require("../cloudinary/index.js");
+const cloudinary = require("cloudinary").v2;
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ const register = async (req, res) => {
         const { error } = registerValidator.validate(req.body, { abortEarly: false })
 
         if (error) {
+            if(fileImage) cloudinary.uploader.destroy(fileImage.filename);
             const errors = error.details.map((err => err.message))
             return res.status(400).json({
                 message: errors
@@ -29,8 +31,6 @@ const register = async (req, res) => {
         }
 
         const emailExists = await userModel.findOne({ email: email });
-        // const userNameExists = await userModel.findOne({ userName: userName });
-        // const phoneNumberExists = await userModel.findOne({ phoneNumber: phoneNumber });
         if (emailExists) {
             return res.status(400).json({
                 message: "Email này đã được đăng ký, bạn vui lòng nhập email khác!"
@@ -75,6 +75,7 @@ const register = async (req, res) => {
             user
         });
     } catch (error) {
+        if(fileImage) cloudinary.uploader.destroy(fileImage.filename);
         return res.status(500).json({
             name: error.name,
             message: error.message
@@ -189,6 +190,7 @@ const updateUser = async (req, res) => {
 
         const { error } = updateValidator.validate(req.body);
         if (error) {
+            if(fileImage) cloudinary.uploader.destroy(fileImage.filename);
             return res.status(400).json({
                 message: error.details[0].message || "Please re-check your data!",
             });
@@ -216,15 +218,16 @@ const updateUser = async (req, res) => {
             })
         }
 
-        console.log(data);
+        // console.log(data);
 
         const idUser = req.params.id;
 
-        console.log('data:' + data);
+        // console.log('data:' + data);
         const editedData = await userModel.findByIdAndUpdate(idUser, data, { new: true })
 
         
         if (!editedData) {
+            if(fileImage) cloudinary.uploader.destroy(fileImage.filename);
             return res.status(404).json({
                 message: "Cập nhật thông tin User không thành công!",
             });
@@ -237,9 +240,33 @@ const updateUser = async (req, res) => {
             data: editedData
         });
     } catch (error) {
+        if(fileImage) cloudinary.uploader.destroy(fileImage.filename);
         return res.status(500).json({
             message: error.message,
         });
+    }
+};
+
+const deleteUser = async (req, res) => {
+    try {
+        const idUser = req.params.id;
+
+        const data = await userModel.findByIdAndDelete(idUser);
+
+        if (!data) {
+            return res.status(404).json({
+              message: "Deleting user is not successful",
+            });
+          }
+          return res.status(200).json({
+            message: "Deleting user is successful",
+            data,
+          });
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+        });    
     }
 };
 
@@ -248,4 +275,5 @@ module.exports = {
     login,
     updateUser,
     loadUser,
+    deleteUser,
 }

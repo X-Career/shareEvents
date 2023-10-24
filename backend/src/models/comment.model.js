@@ -5,12 +5,16 @@ const Comment = mongoose.Schema({
         type: String,
         required: true
     },
+    status: {
+        type: String,
+        default: "active"
+    },
     events: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "evnet",
+        ref: "event",
         require: true
     },
-    users: {
+    customers: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user",
         require: true
