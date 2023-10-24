@@ -44,26 +44,18 @@ const data = [
 const Event = () => {
   const [product, setProduct] = useState([]);
   const { id } = useParams();
-  const findProduct = (id) => {
-    const res = products.filter(i => i.id == id)
-    console.log('res', res);
-    if (res.length > 0) {
-      setProduct(res[[0]])
+
+  useEffect(() =>{
+    const getProduct = async() =>{
+      const response = await fetch (`http://localhost:3001/events/${id}`);
+      setProduct(await response.json());
     }
-  }
-  useEffect(() => {
-    console.log('id', id);
-    findProduct(id)
-  }, [id]);
-  console.log('product', product)
+    getProduct();
+  },[id])
   return (
     <div className='event-detail-container'>
       <div className='nav-pic'>
-        {!product ?
-          <h2>Not found product!</h2>
-          :
-          <h2>Name Product: <span>{product?.image}</span></h2>
-        }
+        {product.image}
       </div>
       <div className='ticket'>
         <Calender />
