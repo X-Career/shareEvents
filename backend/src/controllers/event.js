@@ -107,11 +107,13 @@ const createEvent = async (req, res) => {
             });
         }
 
-        const updateSeats = await seatModel.findByIdAndUpdate(event.seats, {
-            $addToSet: {
-                events: event._id,
-            }, 
-        });
+        for (i = 0; i <= event.seats.length; i++) {
+            const updateSeats = await seatModel.findByIdAndUpdate(event.seats[i], {
+                $addToSet: {
+                    events: event._id,
+                }, 
+            });
+        }
 
         return res.status(200).json({
             message: "Bạn đã tạo sự kiện thành công!",
@@ -126,12 +128,11 @@ const createEvent = async (req, res) => {
 };
 
 const updateEvent = async (req, res) => {
+    const data = req.body;
+    const idEvent = req.params.id;
+    const fileImages = req.files;
+    const userLogin = req.user?._id;
     try {
-        const data = req.body;
-        const idEvent = req.params.id;
-        const fileImages = req.files;
-        const userLogin = req.user?._id;
-
         const event = await eventModel.findById(idEvent);
         const isEqualCreatorEvent = event.creator._id.equals(userLogin);
 
@@ -153,6 +154,15 @@ const updateEvent = async (req, res) => {
                         message: "Cập nhật Event không thành công!",
                     });
                 }
+
+                for (i = 0; i <= event.seats.length; i++) {
+                const updateSeats = await seatModel.findByIdAndUpdate(event.seats[i], {
+                    $addToSet: {
+                        events: event._id,
+                    }, 
+                });
+            }
+                
 
                 return res.status(200).json({
                     message: "Cập nhật Event thành công",

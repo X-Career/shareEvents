@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Seat = mongoose.Schema({
     nameOfSeat: {
         type: String,
-        required: true
+        require: true
     },
     type: {
         type: String,

@@ -2,7 +2,7 @@ const seatModel = require("../models/seat.model.js");
 const seatValidator = require("../validations/seat.js");
 const userModel = require("../models/user.model.js");
 
-const createSeat = async (res, req) => {
+const createSeat = async (req, res) => {
     try {
         const { error } = seatValidator.validate(req.body);
         if (error) {
@@ -12,6 +12,7 @@ const createSeat = async (res, req) => {
         }
 
         const data = await seatModel.create(req.body)
+        
         if (!data) {
             return res.status(404).json({
                 message: "Creating seat is not successful",
@@ -28,11 +29,20 @@ const createSeat = async (res, req) => {
     }
 };
 
-const getAllSeat = async (res, req) => {
+const getAllSeats = async (req, res) => {
     try {
-        
+        const dataSeats = await seatModel.find()
+        if (!dataSeats && dataSeats.length === 0) {
+            return res.status(404).json({ message: "Seats are not found" });
+        }
+        return res.status(200).json({
+            message: "Seats are successfully",
+            seats: dataSeats,
+        });
     } catch (error) {
-        
+        return res.status(500).json({
+            message: error.message,
+        });
     }
 };
 
@@ -47,7 +57,7 @@ const deleteSeat = async (res, req) => {
 
 module.exports = {
     createSeat,
-    getAllSeat,
+    getAllSeats,
     getSeatById,
     updateSeat,
     deleteSeat
