@@ -10,14 +10,6 @@ const Seat = mongoose.Schema({
         require: true,
         default: "Standard"
     },
-    price: {
-        type: Number,
-        require: true
-    },
-    status: {
-        type: Boolean,
-        default: false
-    },
     events: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "event",
