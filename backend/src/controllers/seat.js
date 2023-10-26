@@ -31,13 +31,21 @@ const createSeat = async (req, res) => {
 
 const getAllSeats = async (req, res) => {
     try {
-        const dataSeats = await seatModel.find()
+        const dataSeats = await seatModel.find({});
         if (!dataSeats && dataSeats.length === 0) {
             return res.status(404).json({ message: "Seats are not found" });
         }
+
+        // console.log(String(dataSeats[0]._id));
+        const seats = [];
+        for (i = 0; i < dataSeats.length; i++) {
+            seats.push(String(dataSeats[i]._id));
+        }
+
+        
         return res.status(200).json({
             message: "Seats are successfully",
-            seats: dataSeats,
+            seats: seats,
         });
     } catch (error) {
         return res.status(500).json({
