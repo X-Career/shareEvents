@@ -3,20 +3,12 @@ const mongoose = require('mongoose');
 const Seat = mongoose.Schema({
     nameOfSeat: {
         type: String,
-        required: true
+        require: true
     },
     type: {
         type: String,
         require: true,
         default: "Standard"
-    },
-    price: {
-        type: Number,
-        require: true
-    },
-    status: {
-        type: Boolean,
-        default: false
     },
     events: [{
         type: mongoose.Schema.Types.ObjectId,

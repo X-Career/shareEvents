@@ -76,24 +76,28 @@ const updateComment = async (req, res) => {
         }
 
         const comment = await commentModel.findById(idComment).populate("customers").populate("events");
+        const isEqualCreatorComment = comment.customers._id.equals(userLogin);
+        const isEqualCreatorEvent = comment.events.creator._id.equals(userLogin);
+        // console.log("idLogin: " + userLogin + " idCreatorEvent: " + comment.events.creator + "idCreatorComment: " + comment.customers)
+        if (isEqualCreatorComment || isEqualCreatorEvent) {
+            // console.log('data:' + data);
+            const editedData = await commentModel.findByIdAndUpdate(idComment, commentData, { new: true })
 
-        console.log("comment: " + comment + "idLogin: " + userLogin + " idCreator: " + comment.events.creator._id)
-        if (userLogin !== comment.customers._id ?? comment.events.creator._id) {
-            return res.status(400).json({ message: "Bạn không có quyền chỉnh sửa Comment này!" });
-        }
+            if (!editedData) {
+                return res.status(404).json({
+                    message: "Cập nhật Comment không thành công!",
+                });
+            }
 
-        // console.log('data:' + data);
-        const editedData = await commentModel.findByIdAndUpdate(idComment, commentData, { new: true })
-
-        if (!editedData) {
-            return res.status(404).json({
-                message: "Cập nhật Comment không thành công!",
+            return res.status(200).json({
+                message: "Cập nhật Comment thành công",
+                data: editedData
             });
         }
 
-        return res.status(200).json({
-            message: "Cập nhật Comment thành công",
-            data: editedData
+
+        return res.status(400).json({
+            message: "Bạn không có quyền chỉnh sửa Comment này!"
         });
 
     } catch (error) {
@@ -103,7 +107,42 @@ const updateComment = async (req, res) => {
     }
 };
 
+const deleteComment = async (req, res) => {
+    try {
+        const idComment = req.params.id;
+        const userLogin = req.user?._id;
+
+        const comment = await commentModel.findById(idComment).populate("customers").populate("events");
+        const isEqualCreatorComment = comment.customers._id.equals(userLogin);
+        const isEqualCreatorEvent = comment.events.creator._id.equals(userLogin);
+
+
+        if (isEqualCreatorComment || isEqualCreatorEvent) {
+            // console.log(123);
+            const data = await commentModel.findByIdAndDelete(idComment);
+            if (!data) {
+                return res.status(404).json({
+                    message: "Bạn đã xoá Comment này không thành công!",
+                });
+            }
+            return res.status(200).json({
+                message: "Bạn đã xoá Comment này thành công!",
+                data,
+            });
+        }
+        return res.status(400).json({
+            message: "Bạn không có quyền xoá Comment này!"
+        })
+        
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        }) 
+    }
+};
+
 module.exports = {
     createComment,
-    updateComment
+    updateComment,
+    deleteComment
 }

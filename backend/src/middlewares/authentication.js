@@ -62,7 +62,7 @@ const checkPermissionAdmin = async (req, res, next) => {
 
         const checkUser = await userModel.findById(userId)
 
-        console.log(checkUser);
+        // console.log(checkUser);
 
         if(!checkUser || checkUser.role !== "admin"){
             return res.status(404).json({message: "Bạn không có quyền làm việc này!"});
