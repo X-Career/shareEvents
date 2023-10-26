@@ -45,7 +45,7 @@ const Header = () => {
     </Menu>
   );
   const userImg = loggedIn ? <Avatar src= { userAvatar } />  : <UserOutlined/>
-  console.log(userImg)
+
 
   return (
     <AntdHeader className="header">

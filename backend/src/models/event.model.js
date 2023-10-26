@@ -13,11 +13,13 @@ const Event = mongoose.Schema({
     },
     endingTime: {
         type: String,
-        require: true
+        require: true,
+      
     },
     startingTime: {
         type: String,
-        require: true
+        require: true,
+     
     },
     image: {
         type: Array,
