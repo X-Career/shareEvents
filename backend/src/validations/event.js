@@ -28,18 +28,13 @@ const eventValidator = Joi.object({
     }),
     information: Joi.string(),
     orders: Joi.array(),
-    paymentOfMethod: Joi.string().required().messages({
-        "string.empty": "paymentOfMethod không được để trống!",
-        "any.required": "Trường \"paymentOfMethod\" là bắt buộc!"
-    }),
+    paymentOfMethod: Joi.string(),
     price: Joi.array().required().messages({
         "any.required": "Trường \"quantityOfSeat\" là bắt buộc!"
     }),
     categories: Joi.string(),
     creator: Joi.string(),
-    comments: Joi.array().required().messages({
-        "any.required": "Trường \"comments\" là bắt buộc!",
-    }), 
+    comments: Joi.array(), 
 });
 
 module.exports = {

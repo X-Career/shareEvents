@@ -5,7 +5,7 @@ import './Watchmore.css';
 function Watchmore() {
     const [noElement, setnoElement] = useState(3);
     const slice = products.slice(0, noElement);
-    const loadMore = () =>{
+    const loadMore = () => {
         setnoElement(noElement + noElement);
     }
     return (
@@ -17,7 +17,7 @@ function Watchmore() {
             <div className='list'>
                 {slice.map((item) => {
                     return (
-                        <div className='col-lg-4 control-list '>
+                        <div className='col-lg-4 control-list ' key={item.id}>
                             <img
                                 className="product-image "
                                 src={item.image}
@@ -31,8 +31,8 @@ function Watchmore() {
                         </div>
                     )
                 })}
-                <button className='btnn' 
-                onClick={() => loadMore()}>
+                <button className='btnn'
+                    onClick={() => loadMore()}>
                     See more
                 </button>
             </div>

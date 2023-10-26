@@ -106,6 +106,15 @@ const createEvent = async (req, res) => {
                 message: "Thêm category cho sự kiện không thành công!",
             });
         }
+
+        for (i = 0; i <= event.seats.length; i++) {
+            const updateSeats = await seatModel.findByIdAndUpdate(event.seats[i], {
+                $addToSet: {
+                    events: event._id,
+                },
+            });
+        }
+
         return res.status(200).json({
             message: "Bạn đã tạo sự kiện thành công!",
             events: event,
@@ -119,12 +128,11 @@ const createEvent = async (req, res) => {
 };
 
 const updateEvent = async (req, res) => {
+    const data = req.body;
+    const idEvent = req.params.id;
+    const fileImages = req.files;
+    const userLogin = req.user?._id;
     try {
-        const data = req.body;
-        const idEvent = req.params.id;
-        const fileImages = req.files;
-        const userLogin = req.user?._id;
-
         const event = await eventModel.findById(idEvent);
         const isEqualCreatorEvent = event.creator._id.equals(userLogin);
 
@@ -146,6 +154,15 @@ const updateEvent = async (req, res) => {
                         message: "Cập nhật Event không thành công!",
                     });
                 }
+
+                for (i = 0; i <= event.seats.length; i++) {
+                    const updateSeats = await seatModel.findByIdAndUpdate(event.seats[i], {
+                        $addToSet: {
+                            events: event._id,
+                        },
+                    });
+                }
+
 
                 return res.status(200).json({
                     message: "Cập nhật Event thành công",
@@ -183,21 +200,30 @@ const updateEvent = async (req, res) => {
 const deleteEvent = async (req, res) => {
     try {
         const idEvent = req.params.id;
-        const dataEvent = await eventModel.find({ _id: idEvent, status: "Draft", orders: [] });
-        if (!dataEvent) {
-            return res.status(400).json({
-                message: "Bạn không thể xoá sự kiện, khi chưa hoàn tiền vé hoặc Sự kiện của bạn đang trong tình trạng publish!"
-            })
-        }
-        const data = await eventModel.findByIdAndDelete(idEvent);
-        if (!data) {
-            return res.status(404).json({
-                message: "Deleting event is not successful",
+        const userLogin = req.user?._id;
+        const event = await eventModel.findById(idEvent);
+        const isEqualCreatorEvent = event.creator._id.equals(userLogin);
+
+        if (isEqualCreatorEvent) {
+            const dataEvent = await eventModel.find({ _id: idEvent, status: "Draft", orders: [] });
+            if (!dataEvent) {
+                return res.status(400).json({
+                    message: "Bạn không thể xoá sự kiện, khi chưa hoàn tiền vé hoặc Sự kiện của bạn đang trong tình trạng publish!"
+                })
+            }
+            const data = await eventModel.findByIdAndDelete(idEvent);
+            if (!data) {
+                return res.status(404).json({
+                    message: "Deleting event is not successful",
+                });
+            }
+            return res.status(200).json({
+                message: "Deleting event is successful",
+                data,
             });
         }
-        return res.status(200).json({
-            message: "Deleting event is successful",
-            data,
+        return res.status(400).json({
+            message: "Bạn không có quyền Xoá Event này!"
         });
     } catch (error) {
         return res.status(500).json({

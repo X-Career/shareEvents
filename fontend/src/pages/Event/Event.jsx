@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import "./Event.css"
 import { useParams } from 'react-router-dom';
 import Watchmore from '../../components/Watchmore/watchmore';
+import axios from "axios";
 import {
   FacebookOutlined, HeartOutlined, ClockCircleOutlined,
-  CaretDownOutlined,CopyrightOutlined
+  CaretDownOutlined, CopyrightOutlined
 } from '@ant-design/icons'
 const data = [
   {
@@ -43,11 +44,16 @@ const data = [
 const Event = () => {
   const [product, setProduct] = useState([]);
   const { id } = useParams();
-
   useEffect(() => {
     const getProduct = async () => {
-      const response = await fetch(`http://localhost:3001/events/${id}`);
-      setProduct(await response.json());
+      try {
+        const response = await axios.get('http://localhost:3001/event');
+        console.log('res:', response)
+        // setProduct(response.data);
+        return response;
+      } catch (error) {
+        console.log("Lỗi:", error.response.data.message);
+      }
     }
     getProduct();
   }, [id])
