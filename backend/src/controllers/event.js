@@ -65,11 +65,10 @@ const getEventById = async (req, res) => {
 };
 
 const createEvent = async (req, res) => {
-    try {
         const data = req.body;
         const user = req.user?._id;
         const fileImages = req.files?.map(file => file.path);
-
+    try {
         // console.log("image:", fileImages)
 
         const { error } = eventValidator.validate(data);
