@@ -65,11 +65,10 @@ const getEventById = async (req, res) => {
 };
 
 const createEvent = async (req, res) => {
-    try {
         const data = req.body;
         const user = req.user?._id;
         const fileImages = req.files?.map(file => file.path);
-
+    try {
         // console.log("image:", fileImages)
 
         const { error } = eventValidator.validate(data);
@@ -111,7 +110,7 @@ const createEvent = async (req, res) => {
             const updateSeats = await seatModel.findByIdAndUpdate(event.seats[i], {
                 $addToSet: {
                     events: event._id,
-                },
+                }, 
             });
         }
 
@@ -156,13 +155,13 @@ const updateEvent = async (req, res) => {
                 }
 
                 for (i = 0; i <= event.seats.length; i++) {
-                    const updateSeats = await seatModel.findByIdAndUpdate(event.seats[i], {
-                        $addToSet: {
-                            events: event._id,
-                        },
-                    });
-                }
-
+                const updateSeats = await seatModel.findByIdAndUpdate(event.seats[i], {
+                    $addToSet: {
+                        events: event._id,
+                    }, 
+                });
+            }
+                
 
                 return res.status(200).json({
                     message: "Cập nhật Event thành công",

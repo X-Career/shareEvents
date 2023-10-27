@@ -47,9 +47,10 @@ const Event = () => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/event');
+        const response = await axios.get('http://localhost:3001/event?_id');
         console.log('res:', response)
-        // setProduct(response.data);
+        setProduct(response.data);
+        console.log("product:",setProduct)
         return response;
       } catch (error) {
         console.log("Lỗi:", error.response.data.message);
