@@ -1,6 +1,7 @@
 const seatModel = require("../models/seat.model.js");
 const seatValidator = require("../validations/seat.js");
 const userModel = require("../models/user.model.js");
+const eventModel = require("../models/event.model.js");
 
 const createSeat = async (req, res) => {
     try {
@@ -31,17 +32,16 @@ const createSeat = async (req, res) => {
 
 const getAllSeats = async (req, res) => {
     try {
-        const dataSeats = await seatModel.find({});
+        const dataSeats = await seatModel.find({}).populate("events");
         if (!dataSeats && dataSeats.length === 0) {
             return res.status(404).json({ message: "Seats are not found" });
         }
 
-        // console.log(String(dataSeats[0]._id));
+        // console.log(dataSeats);
         const seats = [];
         for (i = 0; i < dataSeats.length; i++) {
             seats.push(String(dataSeats[i]._id));
         }
-
         
         return res.status(200).json({
             message: "Seats are successfully",
@@ -54,10 +54,25 @@ const getAllSeats = async (req, res) => {
     }
 };
 
+const getAllSeatsStandard = async (req, res) => {
+    try {
+        const idEvent = req.params.id;
+        const dataSeatsStandard = await seatModel.find({type: "Standard"}).populate({
+            path: "events",
+            match: { _id: idEvent}
+        });
+
+        console.log(dataSeatsStandard)
+    } catch (error) {
+        
+    }
+};
+
 const getSeatById = async (res, req) => {
     try {
         const idSeat = req.params.id;
         const data = await seatModel.findById(idSeat).populate("events")
+
         if (!data) {
             return res.status(404).json({ message: "Seat is not found" });
         }

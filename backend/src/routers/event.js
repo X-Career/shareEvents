@@ -2,7 +2,8 @@ const router = require('express').Router();
 const { getList, getEventById, createEvent, updateEvent, deleteEvent } = require('../controllers/event.js');
 const { authentication, checkPermissionAdmin, checkPermissionCreator } = require('../middlewares/authentication.js');
 const uploadImage = require('../cloudinary/index.js');
-const { createComment, updateComment, deleteComment } = require('../controllers/comment.js');
+const { createComment } = require('../controllers/comment.js');
+const { createOrder } = require('../controllers/order.js');
 
 router.get('/', getList);
 router.get('/:id', getEventById);
@@ -12,5 +13,6 @@ router.delete('/deleteEvent/:id', checkPermissionCreator, deleteEvent);
 
 
 router.post('/:id/createComment', authentication, createComment);
+router.post('/:id/createOrder', authentication, createOrder);
 
 module.exports = router;

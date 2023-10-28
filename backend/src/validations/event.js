@@ -15,9 +15,7 @@ const eventValidator = Joi.object({
         "date.empty": "Ngày không được để trống"
     }),
     seats: Joi.array(),
-    image: Joi.array().required().messages({
-        "any.required": "Trường hình ảnh là bắt buộc!"
-    }),
+    image: Joi.array(),
     location: Joi.string().required().messages({
         "string.empty": "Location không được để trống!",
         "any.required": "Trường \"location\" là bắt buộc!"

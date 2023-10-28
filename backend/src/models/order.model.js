@@ -7,11 +7,11 @@ const Order = mongoose.Schema({
         default: "chưa thanh toán"
     },
     amount: {
-        type: String,
+        type: Number,
         require: true,
     },
     paymentOfMethod: {
-        type: Array,
+        type: String,
         require: true
     },
     events: {
@@ -23,10 +23,10 @@ const Order = mongoose.Schema({
         ref: "user",
         require: true
     },
-    seats: [{
+    seats: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "seat",
-    }],
+    },
 }, {
     versionKey: false,
     timestamps: true,
