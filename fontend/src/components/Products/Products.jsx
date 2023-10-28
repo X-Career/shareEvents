@@ -4,7 +4,7 @@ import picture3 from '..//..//Slide/D42A24.jpg';
 export const products = [
     {
       id: 1,
-      name: 'Event 1lqkwjdklqjwdlkqjwldjqlwdjlqkwjdlqjwdxlkqwjdxlqjwldqjwldxkqjklwdjq',
+      name: 'Event 1',
       date: "6/10/2015",
       image:  picture1 ,
       category: "Live music",

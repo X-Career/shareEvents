@@ -8,4 +8,8 @@ router.post('/createSeat', checkPermissionAdmin, createSeat)
 router.put('/updateSeat/:id', checkPermissionAdmin, updateSeat);
 router.delete('/deleteSeat/:id', checkPermissionAdmin, deleteSeat);
 
+<<<<<<< HEAD
 module.exports = router;
+=======
+module.exports = router;
+>>>>>>> long
