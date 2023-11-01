@@ -23,10 +23,10 @@ const Order = mongoose.Schema({
         ref: "user",
         require: true
     },
-    seats: {
+    seats: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "seat",
-    },
+    }],
 }, {
     versionKey: false,
     timestamps: true,

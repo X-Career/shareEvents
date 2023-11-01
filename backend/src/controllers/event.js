@@ -6,6 +6,7 @@ const seatModel = require("../models/seat.model");
 const { eventValidator } = require("../validations/event.js");
 const dotenv = require("dotenv");
 const { query } = require("express");
+const { updateSeat } = require("./seat");
 const cloudinary = require("cloudinary").v2;
 
 dotenv.config();
@@ -26,7 +27,7 @@ const getList = async (req, res) => {
         };
 
         const data = await eventModel.paginate({ status: "public" }, options);
-        console.log(data);
+        // console.log(data);
         if (!data.docs && data.docs.length === 0) {
             return res.status(404).json({
                 message: "Không tìm thấy sự kiện!",
@@ -48,7 +49,7 @@ const getEventById = async (req, res) => {
         const commentsData = await commentModel.find({ events: idEvent, status: "active" }).populate("customers").sort({ createdAt: "desc" });
         console.log(commentsData)
 
-        const eventData = await eventModel.findById(idEvent).populate("categories");
+        const eventData = await eventModel.findById(idEvent).populate("categories").populate({path: "seats", select: "-events"});
         if (!eventData) {
             return res.status(404).json({ message: "Event is not found" });
         }
@@ -67,7 +68,7 @@ const getEventById = async (req, res) => {
 const createEvent = async (req, res) => {
         const data = req.body;
         const user = req.user?._id;
-        const fileImages = req.files?.map(file => file.path);
+        const fileImages = req.files?.map(image => image.path);
     try {
         // console.log("image:", fileImages)
 
@@ -106,13 +107,15 @@ const createEvent = async (req, res) => {
             });
         }
 
-        for (i = 0; i <= event.seats.length; i++) {
+        for (let i = 0; i <= event.seats.length; i++) {
             const updateSeats = await seatModel.findByIdAndUpdate(event.seats[i], {
                 $addToSet: {
                     events: event._id,
                 }, 
             });
         }
+
+        
 
         return res.status(200).json({
             message: "Bạn đã tạo sự kiện thành công!",

@@ -50,7 +50,6 @@ const Event = mongoose.Schema({
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "comment"
-
     }],
     categories: {
         type: mongoose.Schema.Types.ObjectId,
