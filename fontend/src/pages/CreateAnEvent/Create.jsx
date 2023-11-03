@@ -27,30 +27,39 @@ const normFile = (e) => {
   }
   return e && e.fileList;
 };
-console.log(normFile)
 
 const createAnEvent = () => {
   const accessToken = useSelector((state) => state.accessToken);
   const API_RegisterEvent = "http://localhost:3001/event/createEvent";
-  const API_CategoriesEvent = "http://localhost:3001/category"
+  const API_CategoriesEvent = "http://localhost:3001/category";
+  const API_SeatEvent = "http://localhost:3001/seat";
   const [form] = Form.useForm();
   const [errorVisible, setErrorVisible] = useState(false);
-  const [categories,setCategories] = useState([])
-  const [seats,setSeats] = useState([])
+  const [categories, setCategories] = useState([]);
   const [fileList, setFileList] = useState([]);
+  const [seats, setSeats] = useState([]);
   useEffect(() => {
-    const getData = async()=>{
+    const getData = async () => {
       try {
         const response = await axios.get(API_CategoriesEvent);
-        setCategories(response.data.datas)
+        setCategories(response.data.datas);
       } catch (error) {
         console.log(error);
       }
-    }
+    };
+    const getSeat = async () => {
+      try {
+        const seatsEvent = await axios.get(API_SeatEvent);
+        const seatValue = seatsEvent.data.seats;
+        setSeats(seatValue);
+        form.setFieldsValue({ seats: seatValue });
+      } catch (error) {
+        console.log(error);
+      }
+    };
     getData();
-  },[])
-
-
+    getSeat();
+  }, [API_CategoriesEvent, API_SeatEvent]);
 
   const onFinish = async (values) => {
     try {
@@ -62,27 +71,27 @@ const createAnEvent = () => {
 
       delete values.saleTime;
       const formData = new FormData();
-    
-    for (const key in values) {
-      if (values.hasOwnProperty(key)) {
-        formData.append(key, values[key]);
+
+      for (const key in values) {
+        if (values.hasOwnProperty(key)) {
+          formData.append(key, values[key]);
+        }
       }
-    }
-    
-    fileList.forEach((file) => {
-      formData.append("image", file);
-    });
-  
+
+      fileList.forEach((file) => {
+        formData.append("image", file);
+      });
+
       console.log(values);
-      console.log(fileList)
-      await axios.post(API_RegisterEvent,formData, {
+      console.log(fileList);
+
+      await axios.post(API_RegisterEvent, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data",
         },
-        
       });
-      console.log("Form sent successfully!");
+      console.log("Form sent successfully!", values);
     } catch (error) {
       if (error) {
         console.error("Error sending form:", error.response.data.message);
@@ -112,7 +121,6 @@ const createAnEvent = () => {
     setErrorVisible(false);
     return Promise.resolve();
   };
-
   return (
     <>
       <Form
@@ -167,8 +175,7 @@ const createAnEvent = () => {
         >
           <Input />
         </Form.Item>
-
-        {/* <Form.Item
+        <Form.Item
           label="Hình ảnh"
           name="image"
           valuePropName="fileList"
@@ -176,38 +183,21 @@ const createAnEvent = () => {
           rules={[{ required: true, message: "Vui lòng chọn hình ảnh!" }]}
         >
           <Upload
-            action="http://localhost:3001/event/createEvent"
+            // action="http://localhost:3001/event/createEvent"
             listType="picture-card"
+            fileList={fileList}
+            onChange={({ fileList }) => setFileList(fileList)}
+            beforeUpload={(fileList) => {
+              console.log(fileList);
+              return false;
+            }}
           >
             <div>
               <PlusOutlined />
               <div style={{ marginTop: 8 }}>Upload</div>
             </div>
           </Upload>
-        </Form.Item> */}
-        <Form.Item
-  label="Hình ảnh"
-  name="image"
-  valuePropName="fileList"
-  getValueFromEvent={normFile}
-  rules={[{ required: true, message: "Vui lòng chọn hình ảnh!" }]}
->
-  <Upload
-    // action="http://localhost:3001/event/createEvent"
-    listType="picture-card"
-    fileList={fileList}
-    onChange={({ fileList }) => setFileList(fileList)}
-    beforeUpload = {(fileList)=>{
-      console.log(fileList);
-      return false;
-    }}
-  >
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  </Upload>
-</Form.Item>
+        </Form.Item>
         <Form.Item
           label="Thông tin"
           name="information"
@@ -215,13 +205,6 @@ const createAnEvent = () => {
         >
           <TextArea rows={4} />
         </Form.Item>
-        {/* <Form.Item
-          label="Giá vé"
-          name="price"
-          rules={[{ required: true, message: "Vui lòng nhập giá vé!" }]}
-        >
-          <InputNumber />
-        </Form.Item> */}
         <Form.Item
           label="Phương thức thanh toán"
           name="paymentOfMethod"
@@ -264,25 +247,17 @@ const createAnEvent = () => {
         <Form.Item
           label="Số lượng chỗ ngồi"
           name="seats"
-          rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
-        >
-          <TreeSelect
-            defaultValue={["uncategorized"]}
-            treeData={[{ title: "Uncategorized", value: "uncategorized" }]}
-            treeDefaultExpandAll
-          />
-        </Form.Item>
-        {/* 
-        <Form.Item
-          label="Số lượng chỗ ngồi"
-          name="seats"
           rules={[
-            { required: true, message: "Vui lòng nhập số lượng chỗ ngồi!" },
+            {
+              required: true,
+              message: "Vui lòng chọn danh mục!",
+            },
           ]}
         >
-          <InputNumber />
-        </Form.Item> */}
-        <Form.List name="price" label="Giá vé">
+          <span>{seats.length}</span>
+        
+        </Form.Item>
+        {/* <Form.List name="price" label="Giá vé">
           {(fields, { add, remove }) => (
             <>
               {fields.map((field, index) => (
@@ -319,7 +294,7 @@ const createAnEvent = () => {
               </Form.Item>
             </>
           )}
-        </Form.List>
+        </Form.List> */}
         <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
           <Button type="primary" htmlType="submit">
             Submit

@@ -7,11 +7,11 @@ const Order = mongoose.Schema({
         default: "chưa thanh toán"
     },
     amount: {
-        type: String,
+        type: Number,
         require: true,
     },
     paymentOfMethod: {
-        type: Array,
+        type: String,
         require: true
     },
     events: {

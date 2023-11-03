@@ -15,9 +15,7 @@ const eventValidator = Joi.object({
         "date.empty": "Ngày không được để trống"
     }),
     seats: Joi.array(),
-    image: Joi.array().required().messages({
-        "any.required": "Trường hình ảnh là bắt buộc!"
-    }),
+    image: Joi.array(),
     location: Joi.string().required().messages({
         "string.empty": "Location không được để trống!",
         "any.required": "Trường \"location\" là bắt buộc!"
@@ -30,7 +28,7 @@ const eventValidator = Joi.object({
     orders: Joi.array(),
     paymentOfMethod: Joi.string(),
     price: Joi.array().required().messages({
-        "any.required": "Trường \"quantityOfSeat\" là bắt buộc!"
+        "any.required": "Trường \"price\" là bắt buộc!"
     }),
     categories: Joi.string(),
     creator: Joi.string(),
