@@ -70,6 +70,7 @@ const createEvent = async (req, res) => {
         const user = req.user?._id;
         // const fileImages = req.files?.map(image => image.path);
     try {
+        // console.log("this is data:",data)
         // console.log("image:", fileImages)
 
         const { error } = eventValidator.validate(data);
@@ -79,6 +80,7 @@ const createEvent = async (req, res) => {
                 message: error.details[0].message || "Bạn vui lòng kiểm tra lại dữ liệu!",
             });
         }
+
 
         const event = await eventModel.create({
             ...data,
