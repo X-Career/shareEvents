@@ -68,7 +68,7 @@ const getEventById = async (req, res) => {
 const createEvent = async (req, res) => {
         const data = req.body;
         const user = req.user?._id;
-        const fileImages = req.files?.map(image => image.path);
+        // const fileImages = req.files?.map(image => image.path);
     try {
         // console.log("image:", fileImages)
 
@@ -83,7 +83,7 @@ const createEvent = async (req, res) => {
         const event = await eventModel.create({
             ...data,
             creator: user,
-            image: fileImages
+            // image: fileImages
         });
 
         // console.log(event)
