@@ -6,7 +6,7 @@ const orderValidator = Joi.object({
     paymentOfMethod: Joi.string(),
     events: Joi.string(),
     customers: Joi.string(),
-    seats: Joi.string(),
+    seats: Joi.array(),
 });
 
 module.exports = orderValidator;

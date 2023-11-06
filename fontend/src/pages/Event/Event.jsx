@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "./Event.css"
 import { useParams } from 'react-router-dom';
-import Watchmore from '../../components/Watchmore/watchmore';
+import Watchmore from '../../components/Watchmore/Watchmore';
 import axios from "axios";
 import {
   FacebookOutlined, HeartOutlined, ClockCircleOutlined,

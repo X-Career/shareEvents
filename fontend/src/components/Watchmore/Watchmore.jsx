@@ -5,6 +5,7 @@ import './Watchmore.css';
 function Watchmore() {
     const [noElement, setnoElement] = useState(3);
     const slice = products.slice(0, noElement);
+    console.log("slice",slice);
     const loadMore = () => {
         setnoElement(noElement + noElement);
     }

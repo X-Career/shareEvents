@@ -28,7 +28,7 @@ const eventValidator = Joi.object({
     orders: Joi.array(),
     paymentOfMethod: Joi.string(),
     price: Joi.array().required().messages({
-        "any.required": "Trường \"quantityOfSeat\" là bắt buộc!"
+        "any.required": "Trường \"price\" là bắt buộc!"
     }),
     categories: Joi.string(),
     creator: Joi.string(),
