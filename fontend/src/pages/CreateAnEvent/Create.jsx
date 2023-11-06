@@ -283,7 +283,10 @@ const createAnEvent = () => {
             },
           ]}
         >
-          <span>{seats.length}</span>
+          <div><Input value={seats.length} disabled/> <span style={{marginLeft:150}}>{seats.length}</span></div>
+         
+
+          
         </Form.Item>
         <Form.Item label="Giá vé">
           <Form.List name="price">

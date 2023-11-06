@@ -68,13 +68,9 @@ const getEventById = async (req, res) => {
 const createEvent = async (req, res) => {
         const data = req.body;
         const user = req.user?._id;
-<<<<<<< HEAD
         // const fileImages = req.files?.map(file => file.path);
         const fileImages = data.image
      
-=======
-        const fileImages = req.files?.map(image => image.path);
->>>>>>> 81ed8e88d764cf59a37c63c700f5ea6d35464df6
     try {
         console.log("this is data:",data)
         console.log("image:", fileImages)

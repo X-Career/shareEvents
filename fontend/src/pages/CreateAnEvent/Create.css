@@ -1,15 +1,35 @@
 .registration-form {
 
   margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-left: 50%;
+}
+.registration-form .ant-column{
+  display: flex;
+}
+.registration-form .ant-picker{
+  margin-left: 40%;
+}
+.registration-form .ant-form-item .ant-form-item-label{
+  overflow:unset;
 }
 
-/* .registration-form .ant-form-item-label {
-  text-align: left;
-}
 
+.registration-form .ant-form-item-label {
+  text-align: center
+}
+.registration-form .ant-select-selector{
+  margin-left: 40%;
+}
+.registration-form .ant-upload-picture-card-wrapper .ant-upload.ant-upload-select >.ant-upload{
+  margin-left: 4%;
+}
 .registration-form .ant-input,
 .registration-form .ant-textarea,
 .registration-form .ant-upload {
+  margin-left: 40%;
   width: 100%;
 }
 
@@ -19,6 +39,8 @@
 
 .registration-form .ant-form-item-label label {
   font-weight: 600;
+  display: flex;
+  justify-content:flex-start
 }
 
 .registration-form .ant-form-item-explain {
@@ -27,4 +49,4 @@
 
 .registration-form .ant-btn {
   margin-top: 10px;
-} */
+}
