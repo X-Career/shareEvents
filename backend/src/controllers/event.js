@@ -67,9 +67,12 @@ const getEventById = async (req, res) => {
 const createEvent = async (req, res) => {
         const data = req.body;
         const user = req.user?._id;
-        const fileImages = req.files?.map(file => file.path);
+        // const fileImages = req.files?.map(file => file.path);
+        const fileImages = data.image
+     
     try {
-        // console.log("image:", fileImages)
+        console.log("this is data:",data)
+        console.log("image:", fileImages)
 
         const { error } = eventValidator.validate(data);
         if (error) {
@@ -79,10 +82,11 @@ const createEvent = async (req, res) => {
             });
         }
 
+
         const event = await eventModel.create({
             ...data,
             creator: user,
-            image: fileImages
+            // image: fileImages
         });
 
         // console.log(event)

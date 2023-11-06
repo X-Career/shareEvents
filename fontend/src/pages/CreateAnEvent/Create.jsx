@@ -1,8 +1,9 @@
 import moment from "moment";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, CloseOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Create.css";
+
 import {
   Button,
   Cascader,
@@ -16,6 +17,9 @@ import {
   Switch,
   TreeSelect,
   Upload,
+  Space,
+  Typography,
+  Card,
 } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 const { RangePicker } = DatePicker;
@@ -38,6 +42,7 @@ const createAnEvent = () => {
   const [categories, setCategories] = useState([]);
   const [fileList, setFileList] = useState([]);
   const [seats, setSeats] = useState([]);
+  const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
   useEffect(() => {
     const getData = async () => {
       try {
@@ -70,25 +75,48 @@ const createAnEvent = () => {
       values.endingTime = moment(endingTime).format("YYYY-MM-DD HH:mm:ss");
 
       delete values.saleTime;
-      const formData = new FormData();
-
-      for (const key in values) {
-        if (values.hasOwnProperty(key)) {
-          formData.append(key, values[key]);
-        }
-      }
-
-      fileList.forEach((file) => {
-        formData.append("image", file);
-      });
 
       console.log(values);
       console.log(fileList);
+      // values.image=["https://res.cloudinary.com/dia2vxa6d/image/upload/v1693644478/web69/rjhketnrpstxtzkddrs8.jpg"]
 
-      await axios.post(API_RegisterEvent, formData, {
+      const uploadPromises = fileList.map(async (file) => {
+        console.log(file);
+        const formData = new FormData();
+        formData.append("file", file.originFileObj);
+        formData.append("upload_preset", "events");
+
+        try {
+          const response = await axios.post(
+            "https://api.cloudinary.com/v1_1/dpmudujak/image/upload",
+            formData
+          );
+
+          console.log(response.data.secure_url);
+          const imageURL = response.data.secure_url;
+          console.log(imageURL);
+          console.log("Đường dẫn ảnh trên Cloudinary:", imageURL);
+          return imageURL;
+        } catch (error) {
+          console.error("Lỗi khi upload ảnh:", error);
+        }
+      });
+
+      const response = await Promise.all(uploadPromises);
+      console.log(response);
+
+      const imageUrls = response;
+      setUploadedImageUrls(imageUrls);
+      console.log(uploadedImageUrls);
+      console.log(imageUrls);
+
+      values.image = imageUrls;
+      console.log(values.image);
+
+      await axios.post(API_RegisterEvent, values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       });
       console.log("Form sent successfully!", values);
@@ -198,6 +226,7 @@ const createAnEvent = () => {
             </div>
           </Upload>
         </Form.Item>
+
         <Form.Item
           label="Thông tin"
           name="information"
@@ -228,7 +257,7 @@ const createAnEvent = () => {
             // treeData={[{ title: "Uncategorized", value: "uncategorized" }]}
             treeData={categories.map((category) => ({
               title: category.name,
-              value: category.name,
+              value: category._id,
             }))}
             treeDefaultExpandAll
           />
@@ -255,46 +284,54 @@ const createAnEvent = () => {
           ]}
         >
           <span>{seats.length}</span>
-        
         </Form.Item>
-        {/* <Form.List name="price" label="Giá vé">
-          {(fields, { add, remove }) => (
-            <>
-              {fields.map((field, index) => (
-                <div
-                  key={field.key}
-                  style={{ display: "flex", alignItems: "center" }}
-                >
-                  <Form.Item
-                    style={{ marginRight: 8 }}
-                    {...field}
-                    fieldKey={[field.fieldKey, "ticketPrice"]}
-                    name={[field.name, "ticketPrice"]}
-                    rules={[
-                      { required: true, message: "Vui lòng nhập giá vé!" },
-                    ]}
-                  >
-                    <InputNumber placeholder="Nhập giá vé" />
-                  </Form.Item>
-                  {fields.length > 1 && (
-                    <Button
-                      type="link"
-                      danger
-                      onClick={() => remove(field.name)}
+        <Form.Item label="Giá vé">
+          <Form.List name="price">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map((field, index) => (
+                  <div key={field.key}>
+                    <Form.Item
+                      name={[field.name, "option"]}
+                      rules={[
+                        { required: true, message: "Vui lòng chọn Option" },
+                      ]}
                     >
-                      Xóa
-                    </Button>
-                  )}
-                </div>
-              ))}
-              <Form.Item>
-                <Button type="dashed" onClick={() => add()} block>
-                  Thêm giá vé
-                </Button>
-              </Form.Item>
-            </>
-          )}
-        </Form.List> */}
+                      <Select placeholder="Chọn Option">
+                        <Select.Option value="standard">Standard</Select.Option>
+                        <Select.Option value="vip">VIP</Select.Option>
+                        <Select.Option value="vvip">V.VIP</Select.Option>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item
+                      name={[field.name, "price"]}
+                      rules={[
+                        { required: true, message: "Vui lòng nhập giá tiền" },
+                      ]}
+                    >
+                      <Input placeholder="Nhập giá tiền" />
+                    </Form.Item>
+                    {fields.length > 1 && (
+                      <Button danger onClick={() => remove(field.name)}>
+                        Xóa
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    block
+                    icon={<PlusOutlined />}
+                  >
+                    Thêm Option
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+        </Form.Item>
         <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
           <Button type="primary" htmlType="submit">
             Submit
