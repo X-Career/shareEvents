@@ -72,8 +72,8 @@ const createEvent = async (req, res) => {
         const fileImages = data.image
      
     try {
-        console.log("this is data:",data)
-        console.log("image:", fileImages)
+        // console.log("this is data:",data)
+        // console.log("image:", fileImages)
 
         const { error } = eventValidator.validate(data);
         if (error) {
