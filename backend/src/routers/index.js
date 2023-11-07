@@ -11,6 +11,6 @@ router.use('/category', categoryRouter);
 router.use('/event', eventRouter);
 router.use('/comment', commentRouter);
 router.use('/seat', seatRouter);
-router.use('/order', orderRouter);
+// router.use('/order', orderRouter);
 
 module.exports = router;

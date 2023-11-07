@@ -22,6 +22,7 @@ import {
   Card,
 } from "antd";
 import { useSelector, useDispatch } from "react-redux";
+import NavBar from "../../components/Navbar/Navbar";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
@@ -43,6 +44,8 @@ const createAnEvent = () => {
   const [fileList, setFileList] = useState([]);
   const [seats, setSeats] = useState([]);
   const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
+  const [paymentOfMethod, setPaymentOfMethod] = useState("Offline");
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -57,7 +60,10 @@ const createAnEvent = () => {
         const seatsEvent = await axios.get(API_SeatEvent);
         const seatValue = seatsEvent.data.seats;
         setSeats(seatValue);
-        form.setFieldsValue({ seats: seatValue });
+        // form.setFieldsValue({ seats: seatValue });
+        form.setFieldsValue({
+          seats: paymentOfMethod === "Online" ? [] : seats,
+        });
       } catch (error) {
         console.log(error);
       }
@@ -67,6 +73,7 @@ const createAnEvent = () => {
   }, [API_CategoriesEvent, API_SeatEvent]);
 
   const onFinish = async (values) => {
+    setPaymentOfMethod(values.paymentOfMethod);
     try {
       const { saleTime } = values;
       const [startingTime, endingTime] = saleTime;
@@ -151,196 +158,215 @@ const createAnEvent = () => {
   };
   return (
     <>
-      <Form
-        form={form}
-        className="registration-form"
-        onFinish={onFinish}
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 14 }}
-        layout="horizontal"
-        style={{ maxWidth: 600 }}
-      >
-        <Form.Item
-          label="Thời Gian"
-          name="time"
-          rules={[
-            { required: true, message: "Vui lòng chọn thời gian tổ chức!" },
-          ]}
+      <div className="layout-createEvent">
+        <NavBar className="navBar" />
+        <Form
+          form={form}
+          className="registration-form"
+          onFinish={onFinish}
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 14 }}
+          layout="horizontal"
+          style={{ maxWidth: 600 }}
         >
-          <DatePicker showTime showSecond={false} />
-        </Form.Item>
+          <Form.Item
+            label="Thời Gian"
+            name="time"
+            rules={[
+              { required: true, message: "Vui lòng chọn thời gian tổ chức!" },
+            ]}
+          >
+            <DatePicker showTime showSecond={false} />
+          </Form.Item>
 
-        <Form.Item
-          label="Thời Gian mở/ngừng bán vé"
-          name="saleTime"
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng chọn thời gian mở và ngừng bán vé!",
-            },
-            { validator: checkEventTime },
-          ]}
-          validateStatus={errorVisible ? "error" : ""}
-          help={errorVisible ? "Thời gian mở/ngừng bán vé không hợp lệ." : ""}
-        >
-          <RangePicker showTime />
-        </Form.Item>
+          <Form.Item
+            label="Thời Gian mở/ngừng bán vé"
+            name="saleTime"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng chọn thời gian mở và ngừng bán vé!",
+              },
+              { validator: checkEventTime },
+            ]}
+            validateStatus={errorVisible ? "error" : ""}
+            help={errorVisible ? "Thời gian mở/ngừng bán vé không hợp lệ." : ""}
+          >
+            <RangePicker showTime />
+          </Form.Item>
 
-        <Form.Item
-          label="Tên chương trình"
-          name="nameE"
-          rules={[
-            { required: true, message: "Vui lòng nhập tên chương trình!" },
-          ]}
-        >
-          <Input />
-        </Form.Item>
+          <Form.Item
+            label="Tên chương trình"
+            name="nameE"
+            rules={[
+              { required: true, message: "Vui lòng nhập tên chương trình!" },
+            ]}
+          >
+            <Input />
+          </Form.Item>
 
-        <Form.Item
-          label="Địa điểm"
-          name="location"
-          rules={[{ required: true, message: "Vui lòng nhập địa điểm!" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Hình ảnh"
-          name="image"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-          rules={[{ required: true, message: "Vui lòng chọn hình ảnh!" }]}
-        >
-          <Upload
-            // action="http://localhost:3001/event/createEvent"
-            listType="picture-card"
-            fileList={fileList}
-            onChange={({ fileList }) => setFileList(fileList)}
-            beforeUpload={(fileList) => {
-              console.log(fileList);
-              return false;
-            }}
+          <Form.Item
+            label="Địa điểm"
+            name="location"
+            rules={[{ required: true, message: "Vui lòng nhập địa điểm!" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Hình ảnh"
+            name="image"
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
+            rules={[{ required: true, message: "Vui lòng chọn hình ảnh!" }]}
+          >
+            <Upload
+              // action="http://localhost:3001/event/createEvent"
+              listType="picture-card"
+              fileList={fileList}
+              onChange={({ fileList }) => setFileList(fileList)}
+              beforeUpload={(fileList) => {
+                console.log(fileList);
+                return false;
+              }}
+            >
+              <div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </div>
+            </Upload>
+          </Form.Item>
+
+          <Form.Item
+            label="Thông tin"
+            name="information"
+            rules={[{ required: true, message: "Vui lòng nhập thông tin!" }]}
+          >
+            <TextArea rows={4} />
+          </Form.Item>
+          <Form.Item
+            label="Cách thức tổ chức"
+            name="paymentOfMethod"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập phương thức thanh toán!",
+              },
+            ]}
+          >
+            <TreeSelect
+              defaultValue={["Offline"]}
+              treeData={[
+                { title: "Offline", value: "Offline" },
+                { title: "Online", value: "Online" },
+              ]}
+              treeDefaultExpandAll
+              onChange={(value) => setPaymentOfMethod(value)}
+            />
+          </Form.Item>
+
+          <Form.Item
+            label="Danh mục"
+            name="categories"
+            rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
+          >
+            <TreeSelect
+              // defaultValue={["uncategorized"]}
+              // treeData={[{ title: "Uncategorized", value: "uncategorized" }]}
+              treeData={categories.map((category) => ({
+                title: category.name,
+                value: category._id,
+              }))}
+              treeDefaultExpandAll
+            />
+          </Form.Item>
+          <Form.Item
+            label="Trạng Thái"
+            name="status"
+            rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
+          >
+            <TreeSelect
+              defaultValue={["Draft"]}
+              treeData={[
+                { title: "Draft", value: "Draft" },
+                { title: "Public", value: "Public" },
+              ]}
+              treeDefaultExpandAll
+            />
+          </Form.Item>
+          <Form.Item
+            label="Số lượng chỗ ngồi"
+            name="seats"
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: "Vui lòng chọn danh mục!",
+            //   },
+            // ]}
           >
             <div>
-              <PlusOutlined />
-              <div style={{ marginTop: 8 }}>Upload</div>
+              <Input
+                value={paymentOfMethod === "Online" ? 0 : seats.length}
+                disabled
+              />
             </div>
-          </Upload>
-        </Form.Item>
-
-        <Form.Item
-          label="Thông tin"
-          name="information"
-          rules={[{ required: true, message: "Vui lòng nhập thông tin!" }]}
-        >
-          <TextArea rows={4} />
-        </Form.Item>
-        <Form.Item
-          label="Phương thức thanh toán"
-          name="paymentOfMethod"
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng nhập phương thức thanh toán!",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Danh mục"
-          name="categories"
-          rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
-        >
-          <TreeSelect
-            defaultValue={["uncategorized"]}
-            // treeData={[{ title: "Uncategorized", value: "uncategorized" }]}
-            treeData={categories.map((category) => ({
-              title: category.name,
-              value: category._id,
-            }))}
-            treeDefaultExpandAll
-          />
-        </Form.Item>
-        <Form.Item
-          label="Trạng Thái"
-          name="status"
-          rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
-        >
-          <TreeSelect
-            defaultValue={["uncategorized"]}
-            treeData={[{ title: "Uncategorized", value: "uncategorized" }]}
-            treeDefaultExpandAll
-          />
-        </Form.Item>
-        <Form.Item
-          label="Số lượng chỗ ngồi"
-          name="seats"
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng chọn danh mục!",
-            },
-          ]}
-        >
-          <div><Input value={seats.length} disabled/> <span style={{marginLeft:150}}>{seats.length}</span></div>
-         
-
-          
-        </Form.Item>
-        <Form.Item label="Giá vé">
-          <Form.List name="price">
-            {(fields, { add, remove }) => (
-              <>
-                {fields.map((field, index) => (
-                  <div key={field.key}>
-                    <Form.Item
-                      name={[field.name, "option"]}
-                      rules={[
-                        { required: true, message: "Vui lòng chọn Option" },
-                      ]}
+            {/* <div><Input value={seats.length} disabled></Input></div>  */}
+          </Form.Item>
+          <Form.Item label="Giá vé">
+            <Form.List name="price">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map((field, index) => (
+                    <div key={field.key}>
+                      <Form.Item
+                        name={[field.name, "option"]}
+                        // rules={[
+                        //   { required: true, message: "Vui lòng chọn Option" },
+                        // ]}
+                      >
+                        <Select placeholder="Chọn Option">
+                          <Select.Option value="standard">
+                            Standard
+                          </Select.Option>
+                          <Select.Option value="vip">VIP</Select.Option>
+                          <Select.Option value="vvip">V.VIP</Select.Option>
+                        </Select>
+                      </Form.Item>
+                      <Form.Item
+                        name={[field.name, "price"]}
+                        rules={[
+                          { required: true, message: "Vui lòng nhập giá tiền" },
+                        ]}
+                      >
+                        <Input placeholder="Nhập giá tiền" />
+                      </Form.Item>
+                      {fields.length > 1 && (
+                        <Button danger onClick={() => remove(field.name)}>
+                          Xóa
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
                     >
-                      <Select placeholder="Chọn Option">
-                        <Select.Option value="standard">Standard</Select.Option>
-                        <Select.Option value="vip">VIP</Select.Option>
-                        <Select.Option value="vvip">V.VIP</Select.Option>
-                      </Select>
-                    </Form.Item>
-                    <Form.Item
-                      name={[field.name, "price"]}
-                      rules={[
-                        { required: true, message: "Vui lòng nhập giá tiền" },
-                      ]}
-                    >
-                      <Input placeholder="Nhập giá tiền" />
-                    </Form.Item>
-                    {fields.length > 1 && (
-                      <Button danger onClick={() => remove(field.name)}>
-                        Xóa
-                      </Button>
-                    )}
-                  </div>
-                ))}
-                <Form.Item>
-                  <Button
-                    type="dashed"
-                    onClick={() => add()}
-                    block
-                    icon={<PlusOutlined />}
-                  >
-                    Thêm Option
-                  </Button>
-                </Form.Item>
-              </>
-            )}
-          </Form.List>
-        </Form.Item>
-        <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
+                      Thêm Option
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+          </Form.Item>
+          <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
     </>
   );
 };

@@ -1,11 +1,13 @@
 .registration-form {
 
-  margin-top: 10%;
+  /* margin-top: 5%; */
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-left: 50%;
+  top: 15%;
+  margin-left: 35%;
 }
+
 .registration-form .ant-column{
   display: flex;
 }
@@ -25,6 +27,17 @@
 }
 .registration-form .ant-upload-picture-card-wrapper .ant-upload.ant-upload-select >.ant-upload{
   margin-left: 4%;
+  position: relative;
+  right: 3%;
+}
+/* .registration-form .ant-upload-wrapper .ant-upload-list{
+  display: flex;
+  position: relative;
+  left: 40%;
+} */
+.registration-form .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container{
+  position: relative;
+  left: 40%;
 }
 .registration-form .ant-input,
 .registration-form .ant-textarea,
@@ -49,4 +62,11 @@
 
 .registration-form .ant-btn {
   margin-top: 10px;
+}
+.navBar {
+  margin-top: 8%;
+  height: auto;
+}
+.navBar .ant-menu-light.ant-menu-root.ant-menu-inline{
+  max-width: 20%;
 }
