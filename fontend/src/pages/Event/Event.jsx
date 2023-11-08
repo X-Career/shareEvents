@@ -3,6 +3,7 @@ import "./Event.css"
 import { useParams } from 'react-router-dom';
 import Watchmore from '../../components/Watchmore/Watchmore';
 import axios from "axios";
+import Comments from '../../components/Comments/Comments';
 import {
   FacebookOutlined, HeartOutlined, ClockCircleOutlined,
   CaretDownOutlined, CopyrightOutlined
@@ -123,7 +124,7 @@ const Event = () => {
           }
         </div>
       </div>
-
+      <Comments/>
       <Watchmore />
     </div>
   )
