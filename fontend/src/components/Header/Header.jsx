@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "./download.png";
+import logo from "../../assets/images/logo.png"
 import "./Header.css";
 import { Layout, Menu, Input, Button, Dropdown, Avatar } from "antd";
 import {
