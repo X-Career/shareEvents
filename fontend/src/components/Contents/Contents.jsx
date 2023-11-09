@@ -35,9 +35,9 @@ const Contents = () => {
           <img className="picture-right" src={pictureRight} alt="" />
         </div>
 
-        <div className="product-list">
+        <div className="product-list" >
           {responseEvent?.map((product) => (
-            <div className="product-item" key={product.id}>
+            <div className="product-item" key={product._id}>
               <Link to={`/event/${product._id}`} className="event-details">
                 <img
                   className="product-image"
@@ -47,7 +47,7 @@ const Contents = () => {
                 <div className="product-details">
                   <h3 className="product-name">{product.nameE}</h3>
                   <p className="product-date">{product.time}</p>
-                  <p className="product-category">{product.categories}</p>
+                  <p className="product-category">{product.categories.name}</p>
                 </div>
               </Link>
             </div>

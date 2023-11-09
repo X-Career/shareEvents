@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "./Event.css"
-import { useParams } from 'react-router-dom';
+import { useParams,Link } from 'react-router-dom';
 import Watchmore from '../../components/Watchmore/Watchmore';
 import axios from "axios";
 import Comments from '../../components/Comments/Comments';
@@ -58,7 +58,7 @@ const Event = () => {
         </div>
         <div className='book-now'>
           <a style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <span className='label-book'>Book now</span>
+            <Link className='label-book' to={("/event/:id/booking")}><span>Book now</span></Link>
             <div className='text'>
               <span className='label-1'><FacebookOutlined />Share to facebook</span>
               <span className='label-2'>
@@ -98,7 +98,7 @@ const Event = () => {
           </div>
           <div className='book-nows'>
             <a style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <span className='label-book'>Book now</span>
+              <Link className='label-book' to={("/event/:id/booking")}><span className='label-book'>Book now</span></Link>
               <div className='text'>
                 <span className='label-1'><FacebookOutlined />Share to facebook</span>
                 <span className='label-2'>
