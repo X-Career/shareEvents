@@ -1,6 +1,23 @@
 .demo-logo-vertical {
     height: 50px;
     text-align: center;
-    padding: 5px;
-    margin: 5px;
+    padding-top: 7px;
+}
+
+.nameUser {
+    margin-left: 10px;
+}
+
+.ant-layout-header span.anticon-menu-fold svg {
+    width: 20px !important;
+    height: 20px !important;
+    margin: 5px !important;
+
+}
+
+.ant-input-group-wrapper {
+    display: inline-block;
+    width: 60%;
+    text-align: start;
+    vertical-align: middle;
 }

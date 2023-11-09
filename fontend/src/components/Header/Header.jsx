@@ -28,6 +28,7 @@ const Header = () => {
 
   const UserMenu = (
     <Menu>
+      {/* <Menu.Item>{userName}</Menu.Item>  */}
       <Menu.Item key="profile">Profile</Menu.Item>
       <Menu.Item key="logout" onClick={handleLogout}>
         Logout

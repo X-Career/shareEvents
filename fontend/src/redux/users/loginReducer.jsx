@@ -3,6 +3,7 @@ const initialState = {
   userName: "",
   image:"",
   role: "",
+  fullName: "",
   accessToken:"",
   dataUser: {}
 };
@@ -11,7 +12,7 @@ const loginReducer = (state = initialState, action) => {
   console.log(action)
   switch (action.type) {
     case "LOGIN_SUCCESS":
-      return { ...state, loggedIn: true, userName: action.payload.userName, role: action.payload.role , image: action.payload.image, accessToken: action.payload.accessToken, dataUser: action.payload};
+      return { ...state, loggedIn: true, userName: action.payload.userName, image: action.payload.image, accessToken: action.payload.accessToken, role: action.payload.role, fullName: action.payload.fullName, dataUser: action.payload};
     case "LOGOUT":
       return initialState;
     default:
