@@ -21,9 +21,12 @@ const Login = () => {
         
 
         // const { image } = response.data.user.image;
-        console.log (response.data)
-        dispatch(loginAction(response.data.user.userName, response.data.user.image, response.data.accessToken));
-
+        // console.log (response.data)
+        dispatch(loginAction(response.data.user.userName, response.data.user.image, response.data.accessToken, response.data.user.role, response.data.user.fullName, response.data.user));
+        console.log(response.data.user);
+        if(response.data.user.role === 'admin') {
+          return navigate("/admin");
+        }
         navigate("/");
       } else {
         alert("Đăng nhập thất bại.");

@@ -1,7 +1,7 @@
 import { Route, Router, Routes, useNavigate } from "react-router-dom"
 import React from 'react'
 import AdminLayout from "../layouts/AdminLayout"
-import { CreateSeat, Dashboard, ManageEvent, ManageUser } from "../pages/Admin"
+import { ManageSeat, Dashboard, ManageEvent, ManageUser } from "../pages/Admin"
 import MainLayout from "../layouts/MainLayout"
 import Home from "../pages/Home/Home"
 import Login from "../pages/Login/Login"
@@ -11,7 +11,6 @@ import SuccessPage from '../pages/Users/SuccessPage';
 import EventRegistrationForm from '../pages/CreateAnEvent/Create';
 import SignUp from '../pages/SignUp/SignUp';
 import Booking from "../pages/Booking/Booking"
-
 
 const routers = () => {
     return (
@@ -27,10 +26,10 @@ const routers = () => {
                 <Route path="/event/:_id/booking" element={<Booking/>} />
             </Route>
             <Route path="/admin" element={<AdminLayout />} >
-                <Route path="/admin/dashboard" element={<Dashboard />} />
-                <Route path="/admin/manage-user" element={<ManageUser />} />
+                <Route path="/admin" element={<Dashboard />} />
+                <Route path="/admin/manage-users" element={<ManageUser />} />
                 <Route path="/admin/manage-events" element={<ManageEvent />} />
-                <Route path="/admin/create-seat" element={<CreateSeat />} />
+                <Route path="/admin/manage-seats" element={<ManageSeat />} />
             </Route>
         </Routes>
     )

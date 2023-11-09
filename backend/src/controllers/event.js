@@ -23,6 +23,7 @@ const getList = async (req, res) => {
         const options = {
             page: _page,
             limit: _limit,
+            populate: "categories",
             [_sort]: _order === "desc" ? -1 : 1,
         };
 
