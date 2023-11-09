@@ -10,6 +10,7 @@ import Event from '../pages/Event/Event';
 import SuccessPage from '../pages/Users/SuccessPage';
 import EventRegistrationForm from '../pages/CreateAnEvent/Create';
 import SignUp from '../pages/SignUp/SignUp';
+import Booking from "../pages/Booking/Booking"
 
 
 const routers = () => {
@@ -23,6 +24,7 @@ const routers = () => {
                 <Route path="/register" element={<SignUp />} />
                 <Route path="/success" element={<SuccessPage />} />
                 <Route path="/createAnEvent" element={<EventRegistrationForm />} />
+                <Route path="/event/:_id/booking" element={<Booking/>} />
             </Route>
             <Route path="/admin" element={<AdminLayout />} >
                 <Route path="/admin/dashboard" element={<Dashboard />} />

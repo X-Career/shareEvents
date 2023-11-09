@@ -1,12 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Contents.css";
 import { Link } from "react-router-dom";
 import Slide from "../Slide/Slide";
 import { products } from "../Products/Products";
 import pictureLeft from "..//..//Slide/heading-img-1-left.jpg";
 import pictureRight from "..//..//Slide/heading-img-1-mobile.jpg";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const Contents = () => {
+  const eventData = "http://localhost:3001/event"
+  const [responseEvent, setResponseEvent] = useState()
+  useEffect (() =>{
+    const getData = async() =>{
+     try {
+        const data = await axios.get(eventData);
+        const events = data.data.events.docs;
+        console.log(events)
+        setResponseEvent(events)
+     } catch (error) {
+      console.error(error.response)
+     }
+    }
+    getData()
+  },[eventData])
   return (
     <>
       <Slide />
@@ -19,25 +36,25 @@ const Contents = () => {
         </div>
 
         <div className="product-list">
-          {products.map((product) => (
+          {responseEvent?.map((product) => (
             <div className="product-item" key={product.id}>
-              <Link to={`/event/${product.id}`} className="event-details">
+              <Link to={`/event/${product._id}`} className="event-details">
                 <img
                   className="product-image"
-                  src={product.image}
+                  src={product.image[0]}
                   alt={product.name}
                 />
                 <div className="product-details">
-                  <h3 className="product-name">{product.name}</h3>
-                  <p className="product-date">{product.date}</p>
-                  <p className="product-category">{product.category}</p>
+                  <h3 className="product-name">{product.nameE}</h3>
+                  <p className="product-date">{product.time}</p>
+                  <p className="product-category">{product.categories}</p>
                 </div>
               </Link>
             </div>
           ))}
         </div>
       </div>
-    </>
+    </>   
   );
 };
 
