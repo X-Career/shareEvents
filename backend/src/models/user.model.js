@@ -6,8 +6,8 @@ const User = mongoose.Schema({
         require: true
     },
     gender: {
-        type: Boolean,
-        default: true
+        type: String,
+        default: "Male"
     },
     dateOfBirth: {
         type: String,
@@ -39,7 +39,23 @@ const User = mongoose.Schema({
         type: String,
         require: true,
         default: "member"
-    }
+    },
+    status: {
+        type: String,
+        default: "active"
+    },
+    address: {
+        type: String,
+        default: ""
+    },
+    events: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "event"
+    }],
+    orders: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "order"
+    }]
 }, {
     versionKey: false,
     timestamps: true,

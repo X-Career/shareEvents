@@ -108,8 +108,20 @@ const createEvent = async (req, res) => {
 
         if (!updateCategories) {
             return res.status(404).json({
-                message: "Thêm category cho sự kiện không thành công!",
+                message: "Thêm event cho category không thành công!",
             });
+        }
+
+        const updateUsers = await userModel.findByIdAndUpdate(event.creator, {
+            $addToSet: {
+                events: event._id,
+            }
+        });
+
+        if (!updateUsers) {
+            return res.status(404).json({
+                message: "Thêm event cho user không thành công!",
+            }); 
         }
 
         for (let i = 0; i <= event.seats.length; i++) {
@@ -119,9 +131,7 @@ const createEvent = async (req, res) => {
                 }, 
             });
         }
-
         
-
         return res.status(200).json({
             message: "Bạn đã tạo sự kiện thành công!",
             events: event,

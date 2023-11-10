@@ -3,6 +3,7 @@ import { Outlet, Navigate, Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux";
 import logo from "../../src/assets/images/logo.png"
 import "./AdminLayout.css";
+import { logoutAction } from "../redux/users/logoutAction";
 
 import {
     MenuFoldOutlined,
@@ -13,7 +14,7 @@ import {
     DashboardOutlined,
     ClusterOutlined
 } from '@ant-design/icons';
-import { Layout, Menu, Button, theme, Image, Row, Col, Avatar, Input } from 'antd';
+import { Layout, Menu, Button, theme, Image, Row, Col, Avatar, Input, Dropdown } from 'antd';
 // import Search from 'antd/es/input/Search';
 const { Header, Sider, Content } = Layout;
 const { Search } = Input;
@@ -33,6 +34,21 @@ const AdminLayout = () => {
     const user = useSelector((state) => state.dataUser);
 
     // console.log(user);
+
+    const dispatch = useDispatch();
+
+    const handleLogout = () => {
+        dispatch(logoutAction());
+        navigate("/");
+        // console.log(handleLogout);
+    };
+
+    const UserMenu = (
+        <Menu>
+            <Menu.Item key="profile">Profile</Menu.Item>
+            <Menu.Item key="logout" onClick={handleLogout}>Logout</Menu.Item>
+        </Menu>
+    );
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
@@ -96,11 +112,13 @@ const AdminLayout = () => {
                             <Search placeholder="input search text" onSearch={onSearch} enterButton />
                         </Col>
                         <Col md={6}>
-                            <div>
-                                {(!user.image) ? <Avatar size="large" icon={<UserOutlined />} /> : <Avatar size="large" src={user.image} />
-                                }
-                                <span className='nameUser'>{user.fullName}</span>
-                            </div>
+                            <Dropdown overlay={UserMenu} trigger={["click"]}>
+                                <div>
+                                    {(!user.image) ? <Avatar size="large" icon={<UserOutlined />} /> : <Avatar size="large" src={user.image} />
+                                    }
+                                    <span className='nameUser'>{user.fullName}</span>
+                                </div>
+                            </Dropdown>
                         </Col>
                     </Row>
                 </Header>

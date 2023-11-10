@@ -40,6 +40,18 @@ const createOrder = async (req, res) => {
             });
         }
 
+        const updateUsers = await userModel.findByIdAndUpdate(dataOrder.customers, {
+            $addToSet: {
+                orders: dataOrder._id,
+            }
+        });
+
+        if (!updateUsers) {
+            return res.status(404).json({
+                message: "Thêm order cho user không thành công!",
+            }); 
+        }
+
         return res.status(200).json({
             message: "Creating order is successful",
             datas: dataOrder,

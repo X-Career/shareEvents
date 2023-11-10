@@ -270,10 +270,36 @@ const deleteUser = async (req, res) => {
     }
 };
 
+const getAllUsers = async (req, res) => {
+    try {
+        const pageSize = req.query.pageSize || 10
+        const pageIndex = req.query.pageIndex || 1
+
+        const users = await userModel.find({}, '-password').skip(pageSize * pageIndex - pageSize).limit(pageSize).populate("events")
+        
+        const count = await userModel.countDocuments();
+        const totalPage = Math.ceil(count / pageSize); 
+
+        return res.status(200).json({message: "Get users success", result: {
+            users,
+            count,
+            totalPage,
+            pageSize, 
+            pageIndex
+        }})
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+        });
+    }
+};
+
 module.exports = {
     register,
     login,
     updateUser,
     loadUser,
     deleteUser,
+    getAllUsers
 }

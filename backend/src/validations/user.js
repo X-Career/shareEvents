@@ -21,7 +21,9 @@ const updateValidator = Joi.object({
         "any.only": "Mật khẩu nhập lại không khớp!"
     }),
     role: Joi.string().messages({
-    })
+    }),
+    events: Joi.array(),
+    orders: Joi.array()
 });
 
 const loginValidator = Joi.object({
@@ -68,7 +70,10 @@ const registerValidator = Joi.object({
         "any.only": "Mật khẩu nhập lại không khớp!"
     }),
     role: Joi.string().messages({
-    })
+    }),
+    events: Joi.array(),
+    orders: Joi.array(),
+    status: Joi.string(),
 });
 
 module.exports = {
