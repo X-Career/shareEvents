@@ -8,8 +8,8 @@ import {
   FacebookOutlined, HeartOutlined, ClockCircleOutlined,
   CaretDownOutlined, CopyrightOutlined
 } from '@ant-design/icons'
-
 const Event = () => {
+  const{_id} = useParams();
   const [product, setProduct] = useState([]);
   const [image, setImage] = useState([]);
   const [time, setTime] = useState([]);
@@ -19,17 +19,18 @@ const Event = () => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/event');
+        const response = await axios.get(`http://localhost:3001/event/${_id}`);
         console.log('res:', response)
-        setProduct(response.data.events.docs[0].nameE);
-        setImage(response.data.events.docs[0].image);
-        setTime(response.data.events.docs[0].time)
-        setLocation(response.data.events.docs[0].location)
-        setPrice(response.data.events.docs[0].price)
-        setInfo(response.data.events.docs[0].information)
+        setProduct(response.data.event);
+        console.log('setProduct',response.data.event.docs)
+        // setImage(response.data.events.docs[0].image);
+        // setTime(response.data.events.docs[0].time)
+        // setLocation(response.data.events.docs[0].location)
+        // setPrice(response.data.events.docs[0].price)
+        // setInfo(response.data.events.docs[0].information)
         return response;
       } catch (error) {
-        console.log("Lỗi:", error.response.data.message);
+        console.log("Lỗi:", error.response);
       }
 
     }
@@ -37,7 +38,7 @@ const Event = () => {
   }, [])
   return (
     <div className='event-detail-container'>
-      <div className='nav-pic' style={{ backgroundImage: `url(${image})` }} >
+      <div className='nav-pic' style={{ backgroundImage: `url(${product.image})` }} >
       </div>
       <div className='ticket'>
         <div className='calendar'>
@@ -47,13 +48,13 @@ const Event = () => {
         </div>
         <div className='info-ticket'>
           <div className='title-ticket'>
-            <h1>{product}</h1>
+            <h1>{product.nameE}</h1>
           </div>
           <div className='tiket-day'>
-            <p>{time}</p>
+            <p>{product.time}</p>
           </div>
           <div className='ticket-address'>
-            <p className='tk1'><ClockCircleOutlined />{location}</p>
+            <p className='tk1'><ClockCircleOutlined />{product.location}</p>
           </div>
         </div>
         <div className='book-now'>
@@ -72,23 +73,23 @@ const Event = () => {
       <div className='select'>
         <div className='about-all'>
           <div className='about'>ABOUT</div>
-          <div className='infomation'><p className='p-word'>{info}</p></div>
+          <div className='infomation'><p className='p-word'>{product.information}</p></div>
         </div>
         <div className='contain-all'>
           <div className='mini-word'>
-            <h2 className='word'>{product}</h2>
+            <h2 className='word'>{product.nameE}</h2>
           </div>
           <div className='info-t'>
             <div className='time'>
               <ClockCircleOutlined />
               <span className='time-line'>
-                {time}
+                {product.time}
               </span>
             </div>
             <div className='address'>
               <CaretDownOutlined />
               <p className='street'>
-                {location}
+                {product.location}
               </p>
             </div>
           </div>
@@ -113,7 +114,7 @@ const Event = () => {
         <div className='list-info-ticket'>
           <h3 className='title2'>TICKET INFORMATION</h3>
           {
-            price.map((item) => {
+            product.price.map((item) => {
               return (
                 <div className='info' key={item.key}>
                   <p className='word-p'>{item.name}</p>

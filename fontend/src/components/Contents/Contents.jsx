@@ -9,21 +9,22 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const Contents = () => {
+  const{_id} = useParams();
   const eventData = "http://localhost:3001/event"
   const [responseEvent, setResponseEvent] = useState()
-  useEffect (() =>{
-    const getData = async() =>{
-     try {
+  useEffect(() => {
+    const getData = async () => {
+      try {
         const data = await axios.get(eventData);
         const events = data.data.events.docs;
         console.log(events)
         setResponseEvent(events)
-     } catch (error) {
-      console.error(error.response)
-     }
+      } catch (error) {
+        console.error(error.response)
+      }
     }
     getData()
-  },[eventData])
+  }, [eventData])
   return (
     <>
       <Slide />
@@ -54,7 +55,7 @@ const Contents = () => {
           ))}
         </div>
       </div>
-    </>   
+    </>
   );
 };
 
