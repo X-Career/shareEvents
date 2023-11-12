@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import logo from "../../src/assets/images/logo.png"
 import "./AdminLayout.css";
 import { logoutAction } from "../redux/users/logoutAction";
-
+import logo2 from "../../src/assets/images/logo2.jpeg"
 import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
@@ -15,6 +15,7 @@ import {
     ClusterOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme, Image, Row, Col, Avatar, Input, Dropdown } from 'antd';
+import Typography from 'antd/es/typography/Typography';
 // import Search from 'antd/es/input/Search';
 const { Header, Sider, Content } = Layout;
 const { Search } = Input;
@@ -108,8 +109,9 @@ const AdminLayout = () => {
                             />
 
                         </Col>
-                        <Col md={12}>
-                            <Search placeholder="input search text" onSearch={onSearch} enterButton />
+                        <Col md={12} className='title'>
+                            <Typography.Title level={2}>{user.fullName} 's DashBoard</Typography.Title>
+                            {/* <Search placeholder="input search text" onSearch={onSearch} enterButton /> */}
                         </Col>
                         <Col md={6}>
                             <Dropdown overlay={UserMenu} trigger={["click"]}>
