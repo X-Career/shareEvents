@@ -11,6 +11,7 @@ import SuccessPage from '../pages/Users/SuccessPage';
 import EventRegistrationForm from '../pages/CreateAnEvent/Create';
 import SignUp from '../pages/SignUp/SignUp';
 import Booking from "../pages/Booking/Booking"
+import EditUserPage from "../pages/Users/EditUserPage";
 import { getValueFromLocalStorage } from "../utils"
 import { useDispatch, useSelector } from "react-redux";
 
@@ -33,6 +34,7 @@ const routers = () => {
                 <Route path="/admin/manage-users" element={<ManageUser />} />
                 <Route path="/admin/manage-events" element={<ManageEvent />} />
                 <Route path="/admin/manage-seats" element={<ManageSeat />} />
+                <Route path="/admin/profile/:id" element={<EditUserPage />} /> 
             </Route>
         </Routes>
     )

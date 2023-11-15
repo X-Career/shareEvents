@@ -13,7 +13,7 @@ const createSeat = async (req, res) => {
         }
 
         const data = await seatModel.create(req.body)
-        
+
         if (!data) {
             return res.status(404).json({
                 message: "Creating seat is not successful",
@@ -42,7 +42,7 @@ const getAllSeats = async (req, res) => {
         for (i = 0; i < dataSeats.length; i++) {
             seats.push(String(dataSeats[i]._id));
         }
-        
+
         return res.status(200).json({
             message: "Seats are successfully",
             seats: seats,
@@ -54,21 +54,21 @@ const getAllSeats = async (req, res) => {
     }
 };
 
-const getAllSeatsStandard = async (req, res) => {
-    try {
-        const idEvent = req.params.id;
-        const dataSeatsStandard = await seatModel.find({type: "Standard"}).populate({
-            path: "events",
-            match: { _id: idEvent}
-        });
+// const getAllSeatsStandard = async (req, res) => {
+//     try {
+//         const idEvent = req.params.id;
+//         const dataSeatsStandard = await seatModel.find({type: "Standard"}).populate({
+//             path: "events",
+//             match: { _id: idEvent}
+//         });
 
-        console.log(dataSeatsStandard)
-    } catch (error) {
-        
-    }
-};
+//         console.log(dataSeatsStandard)
+//     } catch (error) {
 
-const getSeatById = async (res, req) => {
+//     }
+// };
+
+const getSeatById = async (req, res) => {
     try {
         const idSeat = req.params.id;
         const data = await seatModel.findById(idSeat).populate("events")
@@ -81,9 +81,11 @@ const getSeatById = async (res, req) => {
             datas: data,
         });
     } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }    
-};
+        return res.status(500).json({
+            message: error.message,
+        });
+    };
+}
 
 const updateSeat = async (res, req) => {
     try {
@@ -95,7 +97,7 @@ const updateSeat = async (res, req) => {
         }
 
         const idSeat = req.params.id;
-        const data = await  seatModel.findByIdAndUpdate(idSeat, req.body, { new: true })
+        const data = await seatModel.findByIdAndUpdate(idSeat, req.body, { new: true })
         if (!data) {
             return res.status(404).json({
                 message: "Updating Seat is not successful",

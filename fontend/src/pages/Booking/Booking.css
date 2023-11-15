@@ -1,3 +1,12 @@
 .booking-page{
-    margin-top: 10%;
+    margin-top: 5%;
+}
+.title-box{
+    background-color: blanchedalmond;
+    padding: 25px 0 25px 200px;
+}
+.checkout-process{
+    display: flex;
+    margin: 15px;
+    justify-content: space-evenly;
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Pagination, Popconfirm, Table, Typography, Input, Space } from "antd"
+import { Button, Pagination, Popconfirm, Table, Typography, Input, Space, message } from "antd"
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom"
@@ -7,7 +7,7 @@ import { AiOutlineEdit } from "react-icons/ai"
 import { BsFillTrashFill } from 'react-icons/bs'
 import { getAllUser, deleteUser } from "../../services"
 import { useEffect, useState, useRef } from "react"
-import { toast } from "react-hot-toast"
+// import { toast } from "react-hot-toast"
 
 
 const ManageUser = () => {
@@ -28,9 +28,9 @@ const ManageUser = () => {
             const result = await deleteUser(id);
             setUsers(users.filter(user => user._id !== id));
             setCount(count - 1)
-            toast.success("Xoá User thành công!")
+            message.success("Xoá User thành công!")
         } catch (error) {
-            toast.error("Xoá User thất bại!")
+            message.error("Xoá User thất bại!")
             console.log(error)
         }
     }
@@ -215,7 +215,7 @@ const ManageUser = () => {
         {
             title: "Action",
             render: (_, record) => {
-                return <><Link to={`/add-product/${record?._id}`}><AiOutlineEdit /></Link>
+                return <><Link to={`/admin/profile/${record?._id}`}><AiOutlineEdit /></Link>
                     <Popconfirm title={"Bạn có muốn xoá User này không!"} onConfirm={() => deleteUserById(record?._id)}><BsFillTrashFill /></Popconfirm>
                 </>
             }

@@ -80,6 +80,7 @@ const createAnEvent = () => {
 
       values.startingTime = moment(startingTime).format("YYYY-MM-DD HH:mm:ss");
       values.endingTime = moment(endingTime).format("YYYY-MM-DD HH:mm:ss");
+      values.time = moment(values.time).format('dddd, D MMMM YYYY (hh:mm A)');
 
       delete values.saleTime;
 
@@ -288,7 +289,7 @@ const createAnEvent = () => {
               defaultValue={["Draft"]}
               treeData={[
                 { title: "Draft", value: "Draft" },
-                { title: "Public", value: "Public" },
+                { title: "Public", value: "public" },
               ]}
               treeDefaultExpandAll
             />
