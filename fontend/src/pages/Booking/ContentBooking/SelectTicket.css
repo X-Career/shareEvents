@@ -49,7 +49,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: rgb(19, 25, 217);
+  background-color: green;
   position: relative;
 }
 /* .model-Vip {
@@ -181,15 +181,12 @@
 .color-standart-vvip{
   padding-right: 15%;
 }
-.standart-area span{
-    margin-left: 15px;
-}
-.vip-area span{
-    margin-left: 15px;
-}
+.standart-area span,
+.vip-area span,
 .vvip-area span{
     margin-left: 15px;
 }
+
 
 
 .seatMapComponent-VVip,
@@ -211,6 +208,11 @@
 }
 .seatMapComponent-Standard{
     background-color: yellow;;
+}
+.model-V-Vip.selected .numberSeat,
+.model-Vip.selected .numberSeat,
+.model-Standard.selected .numberSeat {
+background-color: rgb(19, 25, 217);
 }
 
 
