@@ -7,7 +7,7 @@ router.post('/login', login);
 router.post('/register', uploadImage.single('image'), register);
 router.put('/updateUser/:id', authentication, uploadImage.single('image'), updateUser);
 router.get('/loadUser/:id', authentication, loadUser);
-router.delete('/deleteUser/:id', authentication, deleteUser);
+router.delete('/deleteUser/:id', deleteUser);
 router.get('/getAllUsers', getAllUsers);
 
 module.exports = router;

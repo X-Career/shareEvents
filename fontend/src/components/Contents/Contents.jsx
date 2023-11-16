@@ -9,7 +9,6 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const Contents = () => {
-  const{_id} = useParams();
   const eventData = "http://localhost:3001/event"
   const [responseEvent, setResponseEvent] = useState()
   useEffect(() => {

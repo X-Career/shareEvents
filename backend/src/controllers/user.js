@@ -9,6 +9,7 @@ const cloudinary = require("cloudinary").v2;
 dotenv.config();
 
 const register = async (req, res) => {
+    const data = req.body;
     const fullName = req.body.fullName;
     const gender = req.body.gender;
     const dateOfBirth = req.body.dateOfBirth;
@@ -56,6 +57,7 @@ const register = async (req, res) => {
         const hash = bcryptjs.hashSync(password, salt);
 
         const user = await userModel.create({
+            ...data,
             fullName,
             gender,
             dateOfBirth,
@@ -102,6 +104,12 @@ const login = async (req, res) => {
             })
         }
 
+        if (user.status === "block") {
+            return res.status(400).json({
+                message: "User của bạn đã bị khoá, vui lòng liên hệ admin!"
+            }) 
+        }
+
         const isMatch = await bcryptjs.compare(password, user.password)
         if (!isMatch) {
             return res.status(400).json({
@@ -146,25 +154,19 @@ const loadUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const fullName = req.body.fullName;
-        const gender = req.body.gender;
-        const dateOfBirth = req.body.dateOfBirth;
+        const dataEdit = req.body;
         const email = req.body.email;
         const phoneNumber = req.body.phoneNumber;
         const userName = req.body.userName;
         const password = req.body.password;
-        const role = req.body.role;
         const fileImage = req.file;
 
         let data = {};
+        if(req.body){
+            data = req.body
+        }
         if(req.body.fullName){
             data.fullName = req.body.fullName
-        }
-        if(req.body.gender){
-            data.gender = req.body.gender
-        }
-        if(req.body.dateOfBirth){
-            data.dateOfBirth = req.body.dateOfBirth
         }
         if(req.body.email){
             data.email = req.body.email
@@ -179,9 +181,6 @@ const updateUser = async (req, res) => {
             const salt = bcryptjs.genSaltSync();
             const hash = bcryptjs.hashSync(password, salt);
             data.password = hash
-        }
-        if(req.body.role){
-            data.role = req.body.role
         }
         if(req.file){
             data.image = fileImage?.path

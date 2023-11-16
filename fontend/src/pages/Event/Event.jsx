@@ -174,7 +174,7 @@ const Event = () => {
           {product.price?.map((item) => {
             return (
               <div className="info" key={item.key}>
-                <p className="word-p">{item.option}</p>
+                <p className="word-p">{item.name}</p>
                 <strong className="price">{item.price}</strong>
               </div>
             );
