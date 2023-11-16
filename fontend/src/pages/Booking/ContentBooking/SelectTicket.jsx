@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./SelectTicket.css";
 
 const SelectTicket = () => {
@@ -14,9 +14,11 @@ const SelectTicket = () => {
     setCircleInfo(null);
   };
   const handleClick = () => {
-    setTicketClick(circleInfo);
-    console.log(ticketClick)
+    setTicketClick([...ticketClick,circleInfo]);
   }
+  useEffect(() => {
+    console.log(ticketClick);
+  }, [ticketClick]);
   
 
 
@@ -208,10 +210,12 @@ const SelectTicket = () => {
         <span className="infoTicket">Thông tin đặt vé</span>
         <hr />
         {ticketClick && (
-          <div className="ticketInfo">
-            <span>{ticketClick.type}</span>
-            <span>{ticketClick.price}</span>
+          ticketClick.map((ticket,index) =>(
+          <div className="ticketInfo" key={index}>
+            <span>{ticket.type}</span>
+            <span>{ticket.price}</span>
           </div>
+        ))
         )}
         <span className="picketTicket">Vui lòng chọn vé</span>
         <div className="total-price">
