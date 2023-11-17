@@ -1,0 +1,31 @@
+.edit-form {
+    width: 100%;
+    margin: 10px auto;
+    border: 1px solid rgb(230, 235, 245);
+    border-radius: 10px;
+    background-color: white; 
+}
+
+.profile {
+    margin: 30px;
+    width: 100%;
+}
+
+.form-item1 {
+    width: 90%;
+    margin: 5px;
+}
+
+.form-item2 {
+    width: 90%;
+    margin: 5px;
+}
+
+.btn-update {
+    width: 88%;
+    margin: 10px;
+}
+
+.form-date {
+    width: 100%;
+}

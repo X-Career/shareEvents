@@ -1,5 +1,5 @@
 import { Route, Router, Routes, useNavigate } from "react-router-dom"
-import React from 'react'
+import React, { useEffect } from 'react'
 import AdminLayout from "../layouts/AdminLayout"
 import { ManageSeat, Dashboard, ManageEvent, ManageUser } from "../pages/Admin"
 import MainLayout from "../layouts/MainLayout"
@@ -11,8 +11,12 @@ import SuccessPage from '../pages/Users/SuccessPage';
 import EventRegistrationForm from '../pages/CreateAnEvent/Create';
 import SignUp from '../pages/SignUp/SignUp';
 import Booking from "../pages/Booking/Booking"
+import EditUserPage from "../pages/Users/EditUserPage";
+import { getValueFromLocalStorage } from "../utils"
+import { useDispatch, useSelector } from "react-redux";
 
 const routers = () => {
+
     return (
         <Routes>
             <Route path="/" element={<MainLayout />} >
@@ -30,6 +34,7 @@ const routers = () => {
                 <Route path="/admin/manage-users" element={<ManageUser />} />
                 <Route path="/admin/manage-events" element={<ManageEvent />} />
                 <Route path="/admin/manage-seats" element={<ManageSeat />} />
+                <Route path="/admin/profile/:id" element={<EditUserPage />} /> 
             </Route>
         </Routes>
     )

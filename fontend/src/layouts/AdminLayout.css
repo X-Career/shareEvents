@@ -21,3 +21,10 @@
     text-align: start;
     vertical-align: middle;
 }
+
+.title {
+    display: flex;
+    font-size: 20px;
+    font-weight: bold;
+    align-items: center;
+}

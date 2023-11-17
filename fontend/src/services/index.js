@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { getValueFromLocalStorage } from '../utils'
-// import jwtDecode from "jwt-decode"
+import { jwtDecode } from "jwt-decode"
+import { useSelector } from 'react-redux'
 
 const instance = axios.create({
     baseURL: "http://localhost:3001"
@@ -9,3 +10,7 @@ const instance = axios.create({
 export const getAllUser = (pageSize, pageIndex) => {
     return instance.get(`/user/getAllUsers?pageSize=${pageSize}&pageIndex=${pageIndex}`)
 }
+
+export const deleteUser = async (id) => {
+    return await instance.delete(`/user/deleteUser/${id}`);
+  };
