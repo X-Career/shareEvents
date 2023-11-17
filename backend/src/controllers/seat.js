@@ -20,7 +20,13 @@ const createSeat = async (req, res) => {
             });
         }
 
-        // const updateSeatInEvent = await eventModel.findByIdAndUpdate();
+        const updateSeatInEvent = await eventModel.findByIdAndUpdate(
+            (seats.events, {
+                $addToSet: {
+                    seats: data._id,
+                },
+            })
+        );
 
         return res.status(200).json({
             message: "Creating seat is successful",
@@ -38,10 +44,12 @@ const getAllSeats = async (req, res) => {
         const pageSize = req.query.pageSize || 10
         const pageIndex = req.query.pageIndex || 1
 
-        const dataSeats = await seatModel.find({}).skip(pageSize * pageIndex - pageSize).limit(pageSize).populate("events");
+        const dataSeats = await seatModel.find({}).skip(pageSize * pageIndex - pageSize).limit(pageSize);
 
         const count = await seatModel.countDocuments();
         const totalPage = Math.ceil(count / pageSize);
+
+        console.log(dataSeats);
 
         if (!dataSeats) {
             return res.status(404).json({ message: "Seats are not found" });
