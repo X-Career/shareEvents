@@ -6,7 +6,7 @@ const { authentication, checkPermissionAdmin, checkPermissionCreator } = require
 router.post('/login', login);
 router.post('/register', uploadImage.single('image'), register);
 router.put('/updateUser/:id', authentication, uploadImage.single('image'), updateUser);
-router.get('/loadUser/:id', authentication, loadUser);
+router.get('/loadUser/:id', loadUser);
 router.delete('/deleteUser/:id', deleteUser);
 router.get('/getAllUsers', getAllUsers);
 

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Typography, Button, Row, Col, Form, Upload, Select, Input, message, DatePicker, Modal } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Typography, Button, Row, Col, Form, Upload, Select, Input, message, DatePicker, Modal, Avatar } from 'antd';
 import {
   LoadingOutlined,
   UserOutlined,
@@ -7,30 +7,94 @@ import {
   MailOutlined,
   PhoneOutlined,
   PlusOutlined,
+  UploadOutlined
 } from "@ant-design/icons";
+// import useForm from "antd/es/form/Form";
 import { MdOutlinePlace } from "react-icons/md"
 import "./EditUserPage.css";
+import { useParams } from 'react-router-dom'
+import { editUser, getUserById } from '../../services/index'
 
 const { Option } = Select;
 const roles = ["member", "creator", "admin"];
 const genders = ["male", "female", "other"];
 const statuses = ["active", "block"];
-const adminRole = "admin";
 
 
 
 const EditUserPage = () => {
-  
+  const { id } = useParams();
+  const [image, setImage] = useState(null);
+  const [form] = Form.useForm();
 
-  // Form
-  const onFinish = async (values) => {
+  // getdata
+  const getUser = async () => {
+    try {
+      const result = await getUserById(id);
+
+      setImage(result.data.user?.image);
+      form.setFieldValue("fullName", result.data.user?.fullName)
+      form.setFieldValue("phoneNumber", result.data.user?.phoneNumber)
+      form.setFieldValue("email", result.data.user?.email)
+      form.setFieldValue("address", result.data.user?.address)
+      form.setFieldValue("userName", result.data.user?.userName)
+      form.setFieldValue("password", result.data.user?.password)
+      form.setFieldValue("gender", result.data.user?.gender)
+      form.setFieldValue("dateOfBirth", result.data.user?.dateOfBirth)
+      form.setFieldValue("status", result.data.user?.status)
+      form.setFieldValue("role", result.data.user?.role)
+
+    } catch (error) {
+      console.log(error);
+    }
   }
+
+  const uploadUser = async () => {
+    try {
+      const fullName = form.getFieldValue("fullName")
+      const phoneNumber = form.getFieldValue("phoneNumber")
+      const email = form.getFieldValue("email")
+      const address = form.getFieldValue("address")
+      const userName = form.getFieldValue("userName")
+      const gender = form.getFieldValue("gender")
+      const dateOfBirth = form.getFieldValue("dateOfBirth")
+      const status = form.getFieldValue("status")
+      const role = form.getFieldValue("role")
+
+      const data = new FormData()
+
+      data.append("fullName", fullName)
+      data.append("phoneNumber", phoneNumber)
+      data.append("email", email)
+      data.append("address", address)
+      data.append("userName", userName)
+      data.append("password", password)
+      data.append("gender", gender)
+      data.append("dateOfBirth", dateOfBirth)
+      data.append("status", status)
+      data.role("role", role)
+
+      if (image) {
+        data.append("image", image.originFileObj)
+      }
+      const result = await editUser(id, data)
+      message.success("Cập nhật User thành công")
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    if (id) {
+      getUser();
+    }
+  }, [])
+
   return (
     <div>
-      <Typography.Title level={3}>Profile 's Name</Typography.Title>
-
-
-      <Form className="edit-form" layout="vertical" onFinish={onFinish}>
+      <Typography.Title level={3}>Profile 's </Typography.Title>
+      <Form form={form} className="edit-form" layout="vertical" onFinish={uploadUser()}>
         <Row className="profile">
           <Col span={12}>
             <Form.Item className='form-item1'
@@ -84,41 +148,6 @@ const EditUserPage = () => {
               <Input prefix={<UserOutlined />} placeholder="User name" />
             </Form.Item>
 
-            <Form.Item className='form-item1'
-              name="password"
-              label="Password"
-              rules={[{ required: true, message: "Please input your password!" }]}
-            >
-              <Input
-                prefix={<LockOutlined />}
-                type="password"
-                placeholder="Password"
-              />
-            </Form.Item>
-
-            <Form.Item className='form-item1'
-              name="confirmPassword"
-              label="Confirm Password"
-              dependencies={["password"]}
-              rules={[
-                { required: true, message: "Please confirm your password!" },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue("password") === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject("Passwords do not match!");
-                  },
-                }),
-              ]}
-            >
-              <Input
-                prefix={<LockOutlined />}
-                type="password"
-                placeholder="Confirm Password"
-              />
-            </Form.Item>
-
             <Form.Item className="btn-update">
               <Button type="primary" htmlType="submit" block>
                 Update
@@ -137,7 +166,7 @@ const EditUserPage = () => {
               </Select>
             </Form.Item>
 
-            <Form.Item label="Birthday" className='form-item2'>
+            <Form.Item name="dateOfBirth" label="Birthday" className='form-item2'>
               <DatePicker className='form-date' />
             </Form.Item>
 
@@ -162,30 +191,15 @@ const EditUserPage = () => {
             </Form.Item>
           </Col>
           <Col span={8} className='upload-image'>
-          <Form.Item
-            label="Avartar"
-            name="image"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Vui lòng chọn hình ảnh!" }]}
-          >
-            <Upload
-              // action="http://localhost:3001/event/createEvent"
-              listType="picture-card"
-              fileList={fileList}
-              onChange={({ fileList }) => setFileList(fileList)}
-              beforeUpload={(fileList) => {
-                console.log(fileList);
-                return false;
-              }}
+            <Form.Item
+              label="Avartar"
+              name="image"
+              // valuePropName="fileList"
+              // getValueFromUser={normFile}
             >
-              <div>
-                <PlusOutlined />
-                <div style={{ marginTop: 8 }}>Upload</div>
-              </div>
-            </Upload>
-          </Form.Item>
-
+              
+                
+            </Form.Item>
           </Col>
         </Row>
       </Form>
