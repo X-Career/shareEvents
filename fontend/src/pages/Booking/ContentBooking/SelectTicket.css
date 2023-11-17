@@ -214,5 +214,8 @@
 .model-Standard.selected .numberSeat {
 background-color: rgb(19, 25, 217);
 }
-
+.ticketInfo{
+  height: 100%;
+  display: flex;
+}
 

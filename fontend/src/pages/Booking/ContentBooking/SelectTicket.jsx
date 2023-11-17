@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./SelectTicket.css";
+import { message } from "antd"
 
 const SelectTicket = () => {
   const [isCheck, setIsCheck] = useState(false);
@@ -26,10 +27,14 @@ const SelectTicket = () => {
       setTicketClick(updatedTickets);
       console.log(ticketClick);
     } else {
+      if (ticketClick.length < 10){
       const selectedTicket = fakeSeat.find(
         (ticket) => ticket.id === circleInfo.id
       );
       setTicketClick([...ticketClick, selectedTicket]);
+    }else{
+      message.warning("Bạn đã vượt quá số vé được mua là 10 vé")
+    }
     }
   };
   useEffect(() => {
@@ -253,10 +258,22 @@ const SelectTicket = () => {
         <hr />
         {ticketClick && ticketClick.length > 0 ? (
           ticketClick.map((ticket, index) => (
+            // if (ticketClick.type === ticketClick.type){
+          
             <div className="ticketInfo" key={index}>
               <span>{ticket.type}</span>
               <span>{ticket.price}</span>
+              <span>{ticket.id}</span>
             </div>
+            // }else{
+            //   <div className="ticketVip" key= {index}>
+            //     <span>{ticket.type}</span>
+            //     <span>{ticket.price}</span>
+            //     <span>{ticket.id}</span>
+            //   </div>
+            // }
+              
+            
           ))
         ) : (
           <span className="picketTicket">Vui lòng chọn vé</span>
