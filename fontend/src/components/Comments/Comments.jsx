@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
-import './Comment.css'
 import {
     // getComments as getCommentsApi,
     createComment as createCommentApi,
     updateComment as updateCommentApi,
     deleteComment as deleteCommentApi,
 } from "../Comments/api";
-
+import './Comment.css'
 const Comments = ({ commentsUrl, currentUserId }) => {
     const [backendComments, setBackendComments] = useState([]);
     const [activeComment, setActiveComment] = useState(null);

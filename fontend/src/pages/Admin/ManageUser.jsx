@@ -38,7 +38,9 @@ const ManageUser = () => {
     const getData = async () => {
         try {
             const result = await getAllUser(pageSize, pageIndex)
+            console.log('res1',result);
             setUsers(result.data?.result?.users)
+            console.log('res2',result.data?.result?.users)
             setCount(result.data?.result?.count)
             setTotalPage(result.data?.result?.totalPage)
             // console.log(result)
