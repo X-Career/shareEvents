@@ -10,7 +10,18 @@ const instance = axios.create({
 export const getAllUser = (pageSize, pageIndex) => {
     return instance.get(`/user/getAllUsers?pageSize=${pageSize}&pageIndex=${pageIndex}`)
 }
-
 export const deleteUser = async (id) => {
     return await instance.delete(`/user/deleteUser/${id}`);
-  };
+};
+export const getAllEvents = (pageSize, pageIndex) => {
+    return instance.get('/event', {
+        params: {
+            pageSize,
+            pageIndex,
+        },
+    });
+};
+
+export const deleteEvents = async (id) => {
+    return await instance.delete(`/event/deleteEvent/${id}`);
+};

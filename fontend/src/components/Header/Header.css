@@ -16,6 +16,8 @@
   }
   .left-section {
     display: flex;
+    position: relative;
+    bottom: 17px;
   }
   
   .logo img {
