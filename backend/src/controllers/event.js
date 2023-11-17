@@ -44,6 +44,43 @@ const getList = async (req, res) => {
     }
 };
 
+const getAllEvents = async (req, res) => {
+    try {
+        const pageSize = req.query.pageSize || 10
+        const pageIndex = req.query.pageIndex || 1
+        
+        const dataEvents = await eventModel.find({}).populate("categories").populate("creator").sort({createdAt: -1}).skip(pageSize * pageIndex - pageSize).limit(pageSize);
+
+        const count = await eventModel.countDocuments();
+        const totalPage = Math.ceil(count / pageSize);
+
+        // console.log(dataEvents);
+
+        if (!dataEvents) {
+            return res.status(404).json({ message: "Events are not found" });
+        }
+
+        // console.log(dataSeats);
+        // const seats = [];
+        // for (i = 0; i < dataSeats.length; i++) {
+        //     seats.push(String(dataSeats[i]._id));
+        // }
+
+        return res.status(200).json({
+            message: "getting All Events are successfully",
+            result: {
+                dataEvents,
+                count,
+                totalPage,
+                pageSize, 
+                pageIndex
+            } 
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message});
+    }
+};
+
 const getEventById = async (req, res) => {
     try {
         const idEvent = req.params.id;
@@ -251,6 +288,7 @@ const deleteEvent = async (req, res) => {
 
 module.exports = {
     getList,
+    getAllEvents,
     getEventById,
     createEvent,
     updateEvent,

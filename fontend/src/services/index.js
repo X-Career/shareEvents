@@ -34,10 +34,10 @@ export const editUser = async (id, user) => {
     return await axiosInstance.put(`${url}/user/updateUser/${id}`, user);
 };
 
-export const getAllEvents = async (pageSize, pageIndex) => {
-    return await axios.get(`${url}/seat?pageSize=${pageSize}&pageIndex=${pageIndex}`)
+export const getEvents = async (pageSize, pageIndex) => {
+    return await axios.get(`${url}/event?pageSize=${pageSize}&pageIndex=${pageIndex}`)
 };
 
 export const deleteEvent = async (id) => {
-    return await axios.delete(`${url}/seat/deleteEvent/${id}`);
+    return await axios.delete(`${url}/event/deleteEvent/${id}`);
 };
