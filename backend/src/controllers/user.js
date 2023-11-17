@@ -154,7 +154,7 @@ const loadUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const dataEdit = req.body;
+        // const dataEdit = req.body;
         const email = req.body.email;
         const phoneNumber = req.body.phoneNumber;
         const userName = req.body.userName;
