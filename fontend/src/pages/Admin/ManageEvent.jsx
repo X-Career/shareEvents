@@ -20,19 +20,19 @@ const ManageEvent = () => {
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
 
-  // const deleteEventById = async (id) => {
-  //   try {
-  //     console.log('Deleting event with ID:', id);
-  //     const result = await deleteEvents(id);
-  //     console.log('Delete event result:', result);
-  //     setEvents(events.filter(event => event._id !== id));
-  //     setTotalDocs(totalDocs - 1);
-  //     message.success("Xoá event thành công!");
-  //   } catch (error) {
-  //     message.error("Xoá event thất bại!");
-  //     console.log(error);
-  //   }
-  // }
+  const deleteEventById = async (id) => {
+    try {
+      // console.log('Deleting event with ID:', id);
+      const result = await deleteEvents(id);
+      // console.log('Delete event result:', result);
+      setEvents(events.filter(event => event._id !== id));
+      setCount(count - 1);
+      message.success("Xoá event thành công!");
+    } catch (error) {
+      message.error("Xoá event thất bại!");
+      console.log(error);
+    }
+  }
 
   const getData = async () => {
     try {
