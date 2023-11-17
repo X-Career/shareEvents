@@ -9,7 +9,7 @@ router.get('/', getList);
 router.get('/:id', getEventById);
 router.post('/createEvent', checkPermissionCreator, uploadImage.array("image", 10), createEvent);
 router.put('/updateEvent/:id', checkPermissionCreator, uploadImage.array("image", 10), updateEvent);
-router.delete('/deleteEvent/:id', checkPermissionCreator, deleteEvent);
+router.delete('/deleteEvent/:id', deleteEvent);
 
 // comments
 router.post('/:id/createComment', authentication, createComment);

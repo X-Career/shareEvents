@@ -14,6 +14,7 @@ import { logoutAction } from "../../redux/users/logoutAction";
 const { Header: AntdHeader } = Layout;
 
 const Header = () => {
+  const dataUser = useSelector((state) => state.dataUser);
   const loggedIn = useSelector((state) => state.loggedIn);
   const userName = useSelector((state) => state.userName);
   const userAvatar = useSelector((state) => state.image);
@@ -24,6 +25,8 @@ const Header = () => {
     dispatch(logoutAction());
     console.log(handleLogout);
   };
+
+  // console.log(dataUser._id)
 
 
   const UserMenu = (

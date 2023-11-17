@@ -35,17 +35,9 @@ export const editUser = async (id, user) => {
 };
 
 export const getAllEvents = async (pageSize, pageIndex) => {
-    return await axios.get(`${url}/event?pageSize=${pageSize}&pageIndex=${pageIndex}`)
-};
-
-export const deleteEvents = async (id) => {
-    return await axios.delete(`${url}/event/deleteEvent/${id}`);
-};
-
-export const getAllseat = async (pageSize, pageIndex) => {
     return await axios.get(`${url}/seat?pageSize=${pageSize}&pageIndex=${pageIndex}`)
 };
 
-export const deleteSeat = async (id) => {
+export const deleteEvent = async (id) => {
     return await axios.delete(`${url}/seat/deleteEvent/${id}`);
 };
