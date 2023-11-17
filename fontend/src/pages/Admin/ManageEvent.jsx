@@ -5,7 +5,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom"
 import { AiOutlineEdit } from "react-icons/ai"
 import { BsFillTrashFill } from 'react-icons/bs'
-import { getAllEvents, deleteEvents } from "../../services"
+import { getAllEvents, deleteEvent } from "../../services"
 import { useEffect, useState, useRef } from "react"
 
 const ManageEvent = () => {

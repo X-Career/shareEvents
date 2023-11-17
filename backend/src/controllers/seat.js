@@ -19,6 +19,9 @@ const createSeat = async (req, res) => {
                 message: "Creating seat is not successful",
             });
         }
+
+        // const updateSeatInEvent = await eventModel.findByIdAndUpdate();
+
         return res.status(200).json({
             message: "Creating seat is successful",
             datas: data,
@@ -32,20 +35,33 @@ const createSeat = async (req, res) => {
 
 const getAllSeats = async (req, res) => {
     try {
-        const dataSeats = await seatModel.find({}).populate("events");
-        if (!dataSeats && dataSeats.length === 0) {
+        const pageSize = req.query.pageSize || 10
+        const pageIndex = req.query.pageIndex || 1
+
+        const dataSeats = await seatModel.find({}).skip(pageSize * pageIndex - pageSize).limit(pageSize).populate("events");
+
+        const count = await seatModel.countDocuments();
+        const totalPage = Math.ceil(count / pageSize);
+
+        if (!dataSeats) {
             return res.status(404).json({ message: "Seats are not found" });
         }
 
         // console.log(dataSeats);
-        const seats = [];
-        for (i = 0; i < dataSeats.length; i++) {
-            seats.push(String(dataSeats[i]._id));
-        }
+        // const seats = [];
+        // for (i = 0; i < dataSeats.length; i++) {
+        //     seats.push(String(dataSeats[i]._id));
+        // }
 
         return res.status(200).json({
             message: "Seats are successfully",
-            seats: seats,
+            result: {
+                dataSeats,
+                count,
+                totalPage,
+                pageSize, 
+                pageIndex
+            } 
         });
     } catch (error) {
         return res.status(500).json({

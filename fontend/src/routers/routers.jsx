@@ -32,9 +32,10 @@ const routers = () => {
             <Route path="/admin" element={<AdminLayout />} >
                 <Route path="/admin" element={<Dashboard />} />
                 <Route path="/admin/manage-users" element={<ManageUser />} />
+                    <Route path="/admin/profile/:id" element={<EditUserPage />} />
                 <Route path="/admin/manage-events" element={<ManageEvent />} />
                 <Route path="/admin/manage-seats" element={<ManageSeat />} />
-                <Route path="/admin/profile/:id" element={<EditUserPage />} /> 
+                 
             </Route>
         </Routes>
     )
