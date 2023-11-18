@@ -241,7 +241,7 @@ const ManageEvent = () => {
           setPageSize(pageSize);
         }}
         showSizeChanger
-        showTotal={(total) => <Typography.Text strong={true}>Total: {total} Users</Typography.Text>}
+        showTotal={(total) => <Typography.Text strong={true}>Total: {total} Events</Typography.Text>}
       />
     </div>
   )

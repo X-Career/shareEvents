@@ -13,17 +13,17 @@ const ManageSeat = () => {
   const [pageIndex, setPageIndex] = useState(1)
   const [count, setCount] = useState(0)
   const [totalPage, setTotalPage] = useState(0)
-  const [users, setUsers] = useState([])
+  const [seat, setSeat] = useState([])
 
   // Table
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
 
-  const deleteUserById = async (id) => {
+  const deleteSeatById = async (id) => {
     try {
       const result = await deleteSeat(id);
-      setUsers(users.filter(user => user._id !== id));
+      setSeat(seat.filter(seats => seats._id !== id));
       setCount(count - 1)
       message.success("Xoá User thành công!")
     } catch (error) {
@@ -34,10 +34,10 @@ const ManageSeat = () => {
 
   const getData = async () => {
     try {
-      const result = await getAllseat (pageSize, pageIndex)
+      const result = await getAllseat(pageSize, pageIndex)
       console.log('res', result);
-      setUsers(result.data?.result?.users)
-      console.log('res1', result.data?.result?.users)
+      setSeat(result.data.result.dataSeats)
+      console.log('Seat', result.data.result.dataSeats)
       setCount(result.data?.result?.count)
       setTotalPage(result.data?.result?.totalPage)
       // console.log(result)
@@ -157,65 +157,31 @@ const ManageSeat = () => {
 
   const column = [
     {
-      title: "Fullname",
-      dataIndex: "fullName",
-      key: "fullName",
+      title: "NameSeat",
+      dataIndex: "nameOfSeat",
+      key: "nameOfSeat",
       width: '30%',
-      ...getColumnSearchProps('fullName'),
+      ...getColumnSearchProps('nameOfSeat'),
     },
     {
-      title: "Gender",
-      dataIndex: "gender",
-      key: "gender",
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
       width: '10%',
-      ...getColumnSearchProps('gender'),
+      ...getColumnSearchProps('type'),
     },
-    {
-      title: "Date of Birth",
-      dataIndex: "dateOfBirth",
-      width: "30%",
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      width: '30%',
-      ...getColumnSearchProps('email'),
-    },
-    {
-      title: "PhoneNumber",
-      dataIndex: "phoneNumber",
-      key: "phoneNumber",
-      width: '30%',
-      ...getColumnSearchProps('phoneNumber'),
-    },
-    {
-      title: "Username",
-      dataIndex: "userName",
-      key: "username",
-      width: '30%',
-      ...getColumnSearchProps('username'),
-
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      width: '30%',
-      ...getColumnSearchProps('status'),
-    },
-    {
-      title: "Role",
-      dataIndex: "role",
-      key: "role",
-      width: '30%',
-      ...getColumnSearchProps('role'),
-    },
+    // {
+    //   title: "Events",
+    //   dataIndex: "events",
+    //   key: "events",
+    //   width: '30%',
+    //   ...getColumnSearchProps('events'),
+    // },
     {
       title: "Action",
       render: (_, record) => {
         return <><Link to={`/admin/profile/${record?._id}`}><AiOutlineEdit /></Link>
-          <Popconfirm title={"Bạn có muốn xoá User này không!"} onConfirm={() => deleteUserById(record?._id)}><BsFillTrashFill /></Popconfirm>
+          <Popconfirm title={"Bạn có muốn xoá User này không!"} onConfirm={() => deleteSeatById(record?._id)}><BsFillTrashFill /></Popconfirm>
         </>
       }
     }
@@ -230,10 +196,11 @@ const ManageSeat = () => {
       <Typography.Title level={3}>User Management</Typography.Title>
       <Table
         style={{ marginTop: '10px' }}
-        dataSource={users}
+        dataSource={seat}
         columns={column}
         pagination={false}
-      ></Table>
+        rowKey={(record) => record._id}
+      />
       <Pagination
         style={{ marginTop: '10px' }}
         pageSize={pageSize}
@@ -244,7 +211,7 @@ const ManageSeat = () => {
           setPageSize(pageSize)
         }}
         showSizeChanger
-        showTotal={(total) => <Typography.Text strong={true}>Total: {total} Users</Typography.Text>}
+        showTotal={(total) => <Typography.Text strong={true}>Total: {total} Seats</Typography.Text>}
       />
     </div>
   )
