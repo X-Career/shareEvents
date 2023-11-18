@@ -26,6 +26,8 @@ const SelectTicket = () => {
     };
     getEventById();
   }, [`http://beshareevents.onrender.com/event/${_id}`]);
+  // const eventName = eventById.event.nameE;
+  // console.log(eventName)
 
 
   const handleMouseEnter = (stage) => {
@@ -373,3 +375,4 @@ const SelectTicket = () => {
 };
 
 export default SelectTicket;
+
