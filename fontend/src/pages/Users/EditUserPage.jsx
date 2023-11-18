@@ -88,7 +88,6 @@ const EditUserPage = () => {
       data.append("email", email);
       data.append("address", address);
       data.append("userName", userName);
-      data.append("password", password);
       data.append("gender", gender);
       data.append("dateOfBirth", dateOfBirth);
       data.append("status", status);
