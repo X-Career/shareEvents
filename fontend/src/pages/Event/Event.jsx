@@ -22,7 +22,7 @@ const Event = () => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const response = await axios.get(`http://beshareevents.onrender.com/event/${_id}`);
+        const response = await axios.get(`https://beshareevents.onrender.com/event/${_id}`);
         console.log("res:", response.data);
         const eventDetail = response.data.event;
         console.log("event", eventDetail);
