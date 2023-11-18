@@ -1,1 +1,1 @@
-export const url = "beshareevents.onrender.com";
+export const url = "http://beshareevents.onrender.com";

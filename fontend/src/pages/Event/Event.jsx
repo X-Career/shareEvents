@@ -33,7 +33,7 @@ const Event = () => {
       }
     };
     getProduct();
-  }, [`http://localhost:3001/event/${_id}`]);
+  }, [`http://beshareevents.onrender.com/event/${_id}`]);
   console.log("product:", product);
   console.log("price", product.price);
   const dateDetail = product.time

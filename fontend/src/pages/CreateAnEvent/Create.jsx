@@ -61,6 +61,7 @@ const createAnEvent = () => {
         console.log(seatsEvent)
         const seatValue = seatsEvent.data.result.dataSeats;
         setSeats(seatValue);
+        console.log(seatValue)
         // form.setFieldsValue({ seats: seatValue });
         form.setFieldsValue({
           seats: paymentOfMethod === "Online" ? [] : seats,
