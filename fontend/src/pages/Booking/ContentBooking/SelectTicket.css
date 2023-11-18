@@ -214,5 +214,20 @@
 .model-Standard.selected .numberSeat {
 background-color: rgb(19, 25, 217);
 }
-
+.ticketInfo{
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.seatInfo{
+  display: flex;
+  flex-direction: column;
+}
+.ticketId{
+  display: flex;
+  flex-direction: row;
+}
+.showIdTicket{
+  padding: 10px;
+}
 

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./SelectTicket.css";
+import { message } from "antd";
 
 const SelectTicket = () => {
   const [isCheck, setIsCheck] = useState(false);
   const [circleInfo, setCircleInfo] = useState(null);
   const [ticketClick, setTicketClick] = useState([]);
+  const [totalPriceByType, setTotalPriceByType] = useState({});
 
   const handleMouseEnter = (stage) => {
     setCircleInfo(stage);
@@ -13,28 +15,51 @@ const SelectTicket = () => {
   const handleMouseLeave = () => {
     setCircleInfo(null);
   };
+  console.log(circleInfo);
 
   const handleClick = () => {
     const isSelected = ticketClick.find(
       (ticket) => ticket.id === circleInfo.id
     );
-    console.log(isSelected);
+  
     if (isSelected) {
+        console.log(isSelected);
       const updatedTickets = ticketClick.filter(
         (ticket) => ticket.id !== circleInfo.id
       );
       setTicketClick(updatedTickets);
       console.log(ticketClick);
     } else {
-      const selectedTicket = fakeSeat.find(
-        (ticket) => ticket.id === circleInfo.id
-      );
-      setTicketClick([...ticketClick, selectedTicket]);
+      if (ticketClick.length < 10) {
+        const selectedTicket = fakeSeat.find(
+          (ticket) => ticket.id === circleInfo.id
+        );
+        setTicketClick([...ticketClick, selectedTicket]);
+      } else {
+        message.warning("Bạn đã vượt quá số vé được mua là 10 vé");
+      }
     }
   };
   useEffect(() => {
+    // const updatedId = ticketClick.map((ticket) => ticket.id);
+    // setTicketId(updatedId);
     console.log("ticketClick", ticketClick);
+    const updatedTotalPriceByType = ticketClick.reduce((acc, ticket) => {
+      console.log(ticket)
+      if (acc.hasOwnProperty(ticket.type)) {
+        acc[ticket.type] += ticket.price;
+      } else {
+        acc[ticket.type] = ticket.price;
+      }
+    
+   console.log("acc",acc)
+      return acc;
+    }, {});
+    console.log("updatedTotalPriceByType", updatedTotalPriceByType);
+
+    setTotalPriceByType(updatedTotalPriceByType);
   }, [ticketClick]);
+
   const handleCheck = () => {
     setIsCheck(!isCheck);
     console.log(isCheck);
@@ -121,6 +146,20 @@ const SelectTicket = () => {
       price: 500,
     },
   ];
+  const uniqueTicketTypes = [
+    ...new Set(ticketClick.map((ticket) => ticket.type)),
+  ];
+  console.log(uniqueTicketTypes)
+  const ticketCountByType = {};
+  ticketClick.forEach((ticket) => {
+    const { type } = ticket;
+    if (type in ticketCountByType) {
+      ticketCountByType[type]++;
+    } else {
+      ticketCountByType[type] = 1;
+    }
+  });
+
   return (
     <div className="bookingPage">
       <div className="bookingComponent">
@@ -172,6 +211,7 @@ const SelectTicket = () => {
                   // key= {`${stage.type}-${stage.price}-${index}`}
                   key={index}
                   onMouseEnter={() => handleMouseEnter(stage)}
+                  // onMouseEnter={handleMouseEnter(stage)}
                   onMouseLeave={handleMouseLeave}
                   onClick={handleClick}
                 >
@@ -219,7 +259,7 @@ const SelectTicket = () => {
           <div className="seatMapComponent-Standard">
             {fakeSeat
               .filter((stage) => stage.type === "Standard")
-              .map((stage, index, ticket) => (
+              .map((stage, index) => (
                 <div
                   className={`model-${stage.type} ${
                     ticketClick.find((ticket) => ticket.id === stage.id)
@@ -252,12 +292,46 @@ const SelectTicket = () => {
         <span className="infoTicket">Thông tin đặt vé</span>
         <hr />
         {ticketClick && ticketClick.length > 0 ? (
-          ticketClick.map((ticket, index) => (
-            <div className="ticketInfo" key={index}>
-              <span>{ticket.type}</span>
-              <span>{ticket.price}</span>
-            </div>
-          ))
+          uniqueTicketTypes.map((ticketType) => {
+            const count = ticketCountByType[ticketType] || 0;
+        
+            const backgroundColor =
+              ticketType === "Standard"
+                ? "yellow"
+                : ticketType === "Vip"
+                ? "rgb(215, 50, 116)"
+                : ticketType === "V-Vip"
+                ? "rgb(230, 111, 20)"
+                : ticketType === "initial";
+            return (
+              <div className="ticketInfo" key={ticketType}>
+                <div className="ticket-info">
+                  <div className="seatInfo">
+                    <span>{ticketType}</span>
+                  </div>
+                  <div className="ticketId">
+                    {/* <span>{circleInfo.id}</span> */}
+               
+                    {ticketClick
+                      .filter((ticket) => ticket.type === ticketType)
+                      .map((ticket) => (
+                        <span
+                        className="showIdTicket"
+                          key={ticket.id}
+                          style={{ backgroundColor: backgroundColor }}
+                        >
+                          {ticket.id}
+                        </span>
+                      ))}
+                  </div>
+                </div>
+                <span className="ticketCount">{count}</span>
+                <div className="ticketPrice">
+                  <span>{totalPriceByType[ticketType]}</span>
+                </div>
+              </div>
+            );
+          })
         ) : (
           <span className="picketTicket">Vui lòng chọn vé</span>
         )}

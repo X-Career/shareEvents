@@ -16,7 +16,7 @@ const adminRole = "admin";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const API_Register = "http://localhost:3001/user/register"
+  const API_Register = "http://beshareevents.onrender.com/user/register"
   const onFinish = async (values) => {
     const data = {
       ...values,

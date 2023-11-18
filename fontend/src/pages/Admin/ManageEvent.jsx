@@ -5,45 +5,51 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom"
 import { AiOutlineEdit } from "react-icons/ai"
 import { BsFillTrashFill } from 'react-icons/bs'
-import { getAllEvents, deleteEvent } from "../../services"
+import { getEvents, deleteEvent } from "../../services"
 import { useEffect, useState, useRef } from "react"
 
 const ManageEvent = () => {
   const [pageSize, setPageSize] = useState(3)
   const [pageIndex, setPageIndex] = useState(1)
-  const [totalDocs, setTotalDocs] = useState(0)
-  const [totalPages, setTotalPages] = useState(0)
+  const [count, setCount] = useState(0)
+  const [totalPage, setTotalPage] = useState(0)
   const [events, setEvents] = useState([])
 
   // Table
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
+
   const deleteEventById = async (id) => {
     try {
-      console.log('Deleting event with ID:', id);
+      // console.log('Deleting event with ID:', id);
       const result = await deleteEvents(id);
-      console.log('Delete event result:', result);
+      // console.log('Delete event result:', result);
       setEvents(events.filter(event => event._id !== id));
-      setTotalDocs(totalDocs - 1);
+      setCount(count - 1);
       message.success("Xoá event thành công!");
     } catch (error) {
       message.error("Xoá event thất bại!");
       console.log(error);
     }
   }
+
   const getData = async () => {
     try {
-      const result = await getAllEvents(pageSize, pageIndex);
-      console.log('Data from API:', result.data);
-      setEvents(prevEvents => result.data.events.docs.map(event => ({
+      const result = await getEvents(pageSize, pageIndex)
+      console.log('res1', result.data.result?.dataEvents);
+      // setEvents(result.data?.result?.dataEvents)
+      setEvents(prevEvents => result.data.result?.dataEvents.map(event => ({
         ...event,
-        categories: event.categories.name,
+        categories: event.categories?.name,
+        creator: event.creator?.fullName,
       })));
-      setTotalDocs(result.data.events.totalDocs);
-      setTotalPages(result.data.events.totalPages);
+      console.log('res2', result.data?.result?.users)
+      setCount(result.data?.result?.count)
+      setTotalPage(result.data?.result?.totalPage)
+      // console.log(result)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
@@ -158,56 +164,58 @@ const ManageEvent = () => {
 
   const column = [
     {
-      title: "EventName",
+      title: "Event 's Name",
       dataIndex: "nameE",
       key: "nameE",
       width: '30%',
       ...getColumnSearchProps('nameE'),
     },
     {
-      title: "StartingTime",
+      title: "Starting Time",
       dataIndex: "startingTime",
       key: "startingTime",
       width: '10%',
       ...getColumnSearchProps('startingTime'),
     },
     {
-      title: "EndingTime",
+      title: "Ending Time",
       dataIndex: "endingTime",
-      width: "30%",
+      width: "10%",
     },
     {
       title: "Location",
       dataIndex: "location",
       key: "location",
-      width: '30%',
+      width: '20%',
       ...getColumnSearchProps('location'),
     },
     {
-      title: "PaymentOfMethod",
+      title: "Payment Of Method",
       dataIndex: "paymentOfMethod",
       key: "paymentOfMethod",
-      width: '30%',
+      width: '10%',
       ...getColumnSearchProps('paymentOfMethod'),
     },
     {
       title: "Categories",
       dataIndex: "categories",
       key: "categories",
-      width: '30%',
+      width: '10%',
       ...getColumnSearchProps('categories'),
-      render: (text, record) => (
-        <span>
-          {Array.isArray(record.categories) ? record.categories.map(category => category.name).join(', ') : record.categories}
-        </span>
-      ),
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      width: '30%',
+      width: '20%',
       ...getColumnSearchProps('status'),
+    },
+    {
+      title: "Creator",
+      dataIndex: "creator",
+      key: "creator",
+      width: '20%',
+      ...getColumnSearchProps("creator"),
     },
     {
       title: "Action",
@@ -224,7 +232,7 @@ const ManageEvent = () => {
   }, [pageSize, pageIndex])
   return (
     <div>
-      <Typography.Title level={3}>Events Management</Typography.Title>
+      <Typography.Title level={3}>User Management</Typography.Title>
       <Table
         style={{ marginTop: '10px' }}
         dataSource={events}
@@ -234,11 +242,11 @@ const ManageEvent = () => {
       <Pagination
         style={{ marginTop: '10px' }}
         pageSize={pageSize}
-        total={totalDocs}
+        total={count}
         current={pageIndex}
         onChange={(pageIndex, pageSize) => {
-          setPageIndex(pageIndex);
-          setPageSize(pageSize);
+          setPageIndex(pageIndex)
+          setPageSize(pageSize)
         }}
         showSizeChanger
         showTotal={(total) => <Typography.Text strong={true}>Total: {total} Events</Typography.Text>}

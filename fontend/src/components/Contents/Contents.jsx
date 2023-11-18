@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const Contents = () => {
-  const eventData = "http://localhost:3001/event"
+  const eventData = "https://beshareevents.onrender.com/event/getList/"
   const [responseEvent, setResponseEvent] = useState()
   useEffect(() => {
     const getData = async () => {
