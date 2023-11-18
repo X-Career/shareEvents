@@ -226,8 +226,12 @@ background-color: rgb(19, 25, 217);
 .ticketId{
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 .showIdTicket{
   padding: 10px;
+}
+.ticketInfo{
+  margin: 10px;
 }
 

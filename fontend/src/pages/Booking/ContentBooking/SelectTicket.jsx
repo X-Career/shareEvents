@@ -1,12 +1,32 @@
 import React, { useEffect, useState } from "react";
 import "./SelectTicket.css";
 import { message } from "antd";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const SelectTicket = () => {
   const [isCheck, setIsCheck] = useState(false);
   const [circleInfo, setCircleInfo] = useState(null);
   const [ticketClick, setTicketClick] = useState([]);
   const [totalPriceByType, setTotalPriceByType] = useState({});
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [eventById, setEventById] = useState({});
+
+  const { _id } = useParams();
+  useEffect(() => {
+    const getEventById = async () => {
+      try {
+        const response = await axios.get(`https://beshareevents.onrender.com/event/${_id}`);
+        console.log("res:", response.data);
+        setEventById(response.data)
+        console.log("setEvent", product);
+      } catch (error) {
+        console.log("Lỗi:", error.response);
+      }
+    };
+    getEventById();
+  }, [`http://beshareevents.onrender.com/event/${_id}`]);
+
 
   const handleMouseEnter = (stage) => {
     setCircleInfo(stage);
@@ -21,9 +41,9 @@ const SelectTicket = () => {
     const isSelected = ticketClick.find(
       (ticket) => ticket.id === circleInfo.id
     );
-  
+
     if (isSelected) {
-        console.log(isSelected);
+      console.log(isSelected);
       const updatedTickets = ticketClick.filter(
         (ticket) => ticket.id !== circleInfo.id
       );
@@ -45,19 +65,23 @@ const SelectTicket = () => {
     // setTicketId(updatedId);
     console.log("ticketClick", ticketClick);
     const updatedTotalPriceByType = ticketClick.reduce((acc, ticket) => {
-      console.log(ticket)
+      console.log(ticket);
       if (acc.hasOwnProperty(ticket.type)) {
         acc[ticket.type] += ticket.price;
       } else {
         acc[ticket.type] = ticket.price;
       }
-    
-   console.log("acc",acc)
+      console.log("acc", acc);
       return acc;
     }, {});
     console.log("updatedTotalPriceByType", updatedTotalPriceByType);
 
     setTotalPriceByType(updatedTotalPriceByType);
+    
+  }, [ticketClick]);
+  useEffect(() => {
+    const updatedTotalPrice = ticketClick.reduce((sum, ticket) => sum + ticket.price, 0);
+    setTotalPrice(updatedTotalPrice);
   }, [ticketClick]);
 
   const handleCheck = () => {
@@ -149,7 +173,7 @@ const SelectTicket = () => {
   const uniqueTicketTypes = [
     ...new Set(ticketClick.map((ticket) => ticket.type)),
   ];
-  console.log(uniqueTicketTypes)
+  console.log(uniqueTicketTypes);
   const ticketCountByType = {};
   ticketClick.forEach((ticket) => {
     const { type } = ticket;
@@ -159,6 +183,7 @@ const SelectTicket = () => {
       ticketCountByType[type] = 1;
     }
   });
+
 
   return (
     <div className="bookingPage">
@@ -294,7 +319,7 @@ const SelectTicket = () => {
         {ticketClick && ticketClick.length > 0 ? (
           uniqueTicketTypes.map((ticketType) => {
             const count = ticketCountByType[ticketType] || 0;
-        
+
             const backgroundColor =
               ticketType === "Standard"
                 ? "yellow"
@@ -311,12 +336,12 @@ const SelectTicket = () => {
                   </div>
                   <div className="ticketId">
                     {/* <span>{circleInfo.id}</span> */}
-               
+
                     {ticketClick
                       .filter((ticket) => ticket.type === ticketType)
                       .map((ticket) => (
                         <span
-                        className="showIdTicket"
+                          className="showIdTicket"
                           key={ticket.id}
                           style={{ backgroundColor: backgroundColor }}
                         >
@@ -337,7 +362,7 @@ const SelectTicket = () => {
         )}
         <div className="total-price">
           <span>Tổng cộng</span>
-          <span>0 VND</span>
+          <span>{totalPrice} VND</span>
         </div>
         <div className="nextBtn">
           <button>Tiếp tục</button>
