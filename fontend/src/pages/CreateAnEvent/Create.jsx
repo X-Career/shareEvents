@@ -20,6 +20,7 @@ import {
   Space,
   Typography,
   Card,
+  message,
 } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import NavBar from "../../components/Navbar/Navbar";
@@ -66,6 +67,7 @@ const createAnEvent = () => {
         form.setFieldsValue({
           seats: paymentOfMethod === "Online" ? [] : seats,
         });
+        console.log(seats)
       } catch (error) {
         console.log(error);
       }
@@ -130,6 +132,7 @@ const createAnEvent = () => {
         },
       });
       console.log("Form sent successfully!", values);
+      message.success("Tạo sự kiện thành công")
     } catch (error) {
       if (error) {
         console.error("Error sending form:", error.response.data.message);

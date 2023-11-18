@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const { authentication, checkPermissionAdmin, checkPermissionCreator } = require('../middlewares/authentication');
-const { createSeat, updateSeat, deleteSeat, getAllSeats, getSeatById } = require('../controllers/seat.js');
+const { createSeat, updateSeat, deleteSeat, getAllSeats, getAllIdSeat, getSeatById } = require('../controllers/seat.js');
 
 router.get('/getAllSeats', getAllSeats);
+router.get('/getAllIdSeats', getAllIdSeat)
 router.get('/:id', getSeatById);
 router.post('/createSeat', checkPermissionAdmin, createSeat)
 router.put('/updateSeat/:id', checkPermissionAdmin, updateSeat);

@@ -88,7 +88,7 @@ const Event = () => {
               alignItems: "center",
             }}
           >
-            <Link className="label-book" to={"/event/:id/booking"}>
+            <Link className="label-book" to={`/event/${product._id}/booking`}>
               <span>Book now</span>
             </Link>
             <div className="text">
@@ -152,7 +152,7 @@ const Event = () => {
                 alignItems: "center",
               }}
             >
-              <Link className="label-book" to={"/event/:id/booking"}>
+              <Link className="label-book" to={`/event/${product._id}/booking`}>
                 <span className="label-book">Book now</span>
               </Link>
               <div className="text">

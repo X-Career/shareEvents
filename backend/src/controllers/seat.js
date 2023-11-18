@@ -80,34 +80,41 @@ const getAllSeats = async (req, res) => {
 
 const getAllIdSeat = async (req, res) => {
     try {
-        const idEvent = req.params.id;
-        const dataSeatsStandard = await seatModel.find({type: "Standard"}).populate({
-            path: "events",
-            match: { _id: idEvent}
-        });
+        const dataSeats = await seatModel.find({})
 
-        console.log(dataSeatsStandard)
-    } catch (error) {
-
-    }
-};
-
-const getSeatById = async (req, res) => {
-    try {
-        const dataSeats = await seatModel.find({});
-        if (!data) {
-            return res.status(404).json({ message: "Seat is not found" });
+        console.log(dataSeats)
+        if (!dataSeats) {
+            return res.status(404).json({ message: "Seats are not found" });
         }
 
-        // console.log(dataSeats);
+        console.log(dataSeats);
         const seats = [];
         for (i = 0; i < dataSeats.length; i++) {
             seats.push(String(dataSeats[i]._id));
         }
 
         return res.status(200).json({
+            message: "Seats are successfully",
+            result: seats
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+        });
+    }
+};
+
+const getSeatById = async (req, res) => {
+    try {
+        const idSeat = req.params.id;
+        const data = await seatModel.findById(idSeat).populate("events")
+
+        if (!data) {
+            return res.status(404).json({ message: "Seat is not found" });
+        }
+        return res.status(200).json({
             message: "Seat is successfully",
-            result: seats,
+            datas: data,
         });
     } catch (error) {
         return res.status(500).json({
