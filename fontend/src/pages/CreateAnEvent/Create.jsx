@@ -35,9 +35,9 @@ const normFile = (e) => {
 
 const createAnEvent = () => {
   const accessToken = useSelector((state) => state.accessToken);
-  const API_RegisterEvent = "http://localhost:3001/event/createEvent";
-  const API_CategoriesEvent = "http://localhost:3001/category";
-  const API_SeatEvent = "http://localhost:3001/seat";
+  const API_RegisterEvent = "http://beshareevents.onrender.com/event/createEvent";
+  const API_CategoriesEvent = "http://beshareevents.onrender.com/category";
+  const API_SeatEvent = "http://beshareevents.onrender.com/seat/getAllSeats";
   const [form] = Form.useForm();
   const [errorVisible, setErrorVisible] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -58,7 +58,8 @@ const createAnEvent = () => {
     const getSeat = async () => {
       try {
         const seatsEvent = await axios.get(API_SeatEvent);
-        const seatValue = seatsEvent.data.seats;
+        console.log(seatsEvent)
+        const seatValue = seatsEvent.data.result.dataSeats;
         setSeats(seatValue);
         // form.setFieldsValue({ seats: seatValue });
         form.setFieldsValue({
