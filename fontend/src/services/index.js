@@ -2,6 +2,7 @@ import axios from 'axios';
 import { url } from "./api";
 import { jwtDecode } from "jwt-decode"
 
+
 const axiosInstance = axios.create({
     baseURL: url,
 })
@@ -34,10 +35,18 @@ export const editUser = async (id, user) => {
     return await axiosInstance.put(`${url}/user/updateUser/${id}`, user);
 };
 
-export const getEvents = async (pageSize, pageIndex) => {
+export const getAllEvents = async (pageSize, pageIndex) => {
     return await axios.get(`${url}/event?pageSize=${pageSize}&pageIndex=${pageIndex}`)
 };
 
 export const deleteEvent = async (id) => {
-    return await axiosInstance.delete(`${url}/event/deleteEvent/${id}`);
+    return await axios.delete(`${url}/event/deleteEvent/${id}`);
 };
+export const getAllseat = async (pageSize, pageIndex) => {
+    return await axios.get(`${url}/seat/getAllSeats?pageSize=${pageSize}&pageIndex=${pageIndex}`)
+};
+
+export const deleteSeat = async (id) => {
+    return await axiosInstance.delete(`${url}/seat/deleteSeat/${id}`);
+};
+
