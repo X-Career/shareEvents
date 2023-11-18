@@ -39,5 +39,5 @@ export const getEvents = async (pageSize, pageIndex) => {
 };
 
 export const deleteEvent = async (id) => {
-    return await axios.delete(`${url}/event/deleteEvent/${id}`);
+    return await axiosInstance.delete(`${url}/event/deleteEvent/${id}`);
 };

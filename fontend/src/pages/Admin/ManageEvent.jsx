@@ -23,7 +23,7 @@ const ManageEvent = () => {
   const deleteEventById = async (id) => {
     try {
       // console.log('Deleting event with ID:', id);
-      const result = await deleteEvents(id);
+      const result = await deleteEvent(id);
       // console.log('Delete event result:', result);
       setEvents(events.filter(event => event._id !== id));
       setCount(count - 1);
