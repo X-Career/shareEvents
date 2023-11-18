@@ -20,22 +20,22 @@ const routers = () => {
     return (
         <Routes>
             <Route path="/" element={<MainLayout />} >
-                <Route path="/" element={<Home/>} />
-                <Route path="/events/:_id" element={<Events/>} />
-                <Route path="/event/:_id" element={<Event/>} />
+                <Route path="/" element={<Home />} />
+                <Route path="/events/:_id" element={<Events />} />
+                <Route path="/event/:_id" element={<Event />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<SignUp />} />
                 <Route path="/success" element={<SuccessPage />} />
                 <Route path="/createAnEvent" element={<EventRegistrationForm />} />
-                <Route path="/event/:_id/booking" element={<Booking/>} />
+                <Route path="/event/:_id/booking" element={<Booking />} />
             </Route>
             <Route path="/admin" element={<AdminLayout />} >
                 <Route path="/admin" element={<Dashboard />} />
                 <Route path="/admin/manage-users" element={<ManageUser />} />
-                    <Route path="/admin/profile/:id" element={<EditUserPage />} />
+                <Route path="/admin/profile/:id" element={<EditUserPage />} />
                 <Route path="/admin/manage-events" element={<ManageEvent />} />
                 <Route path="/admin/manage-seats" element={<ManageSeat />} />
-                 
+
             </Route>
         </Routes>
     )

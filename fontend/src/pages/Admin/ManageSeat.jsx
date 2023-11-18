@@ -23,13 +23,17 @@ const ManageSeat = () => {
   const deleteSeatById = async (id) => {
     try {
       const result = await deleteSeat(id);
-      console.log("delers:",result)
-      setSeat(seat.filter(seats => seats._id !== id));
-      setCount(count - 1)
-      message.success("Xoá User thành công!")
+      console.log("deleteResult:", result); // In ra để kiểm tra kết quả từ server
+      if (result.data.success) {
+        setSeat(seat.filter(seats => seats._id !== id));
+        setCount(count - 1);
+        message.success("Xoá Ghế thành công!");
+      } else {
+        message.error("Xoá Ghế thất bại!");
+      }
     } catch (error) {
-      message.error("Xoá User thất bại!")
-      console.log(error)
+      message.error("Xoá Ghế thất bại!");
+      console.error(error);
     }
   }
 

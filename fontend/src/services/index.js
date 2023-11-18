@@ -47,6 +47,6 @@ export const getAllseat = async (pageSize, pageIndex) => {
 };
 
 export const deleteSeat = async (id) => {
-    return await axiosInstance.delete(`${url}/seat/deleteEvent/${id}`);
+    return await axiosInstance.delete(`${url}/seat/deleteSeat/${id}`);
 };
 
