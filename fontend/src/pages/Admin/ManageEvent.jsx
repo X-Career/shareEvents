@@ -5,7 +5,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom"
 import { AiOutlineEdit } from "react-icons/ai"
 import { BsFillTrashFill } from 'react-icons/bs'
-import { getEvents, deleteEvent } from "../../services"
+import { getAllEvents, deleteEvent } from "../../services"
 import { useEffect, useState, useRef } from "react"
 
 const ManageEvent = () => {
@@ -23,7 +23,7 @@ const ManageEvent = () => {
   const deleteEventById = async (id) => {
     try {
       // console.log('Deleting event with ID:', id);
-      const result = await deleteEvents(id);
+      const result = await deleteEvent(id);
       // console.log('Delete event result:', result);
       setEvents(events.filter(event => event._id !== id));
       setCount(count - 1);
@@ -36,7 +36,7 @@ const ManageEvent = () => {
 
   const getData = async () => {
     try {
-      const result = await getEvents(pageSize, pageIndex)
+      const result = await getAllEvents(pageSize, pageIndex)
       console.log('res1', result.data.result?.dataEvents);
       // setEvents(result.data?.result?.dataEvents)
       setEvents(prevEvents => result.data.result?.dataEvents.map(event => ({
