@@ -255,10 +255,13 @@ const deleteEvent = async (req, res) => {
     try {
         const idEvent = req.params.id;
         const userLogin = req.user?._id;
+        const user = await userModel.findById(userLogin);
+        const roleUserLogin = user.role;
+
         const event = await eventModel.findById(idEvent);
         const isEqualCreatorEvent = event.creator._id.equals(userLogin);
 
-        if (isEqualCreatorEvent) {
+        if (isEqualCreatorEvent || roleUserLogin === "admin") {
             const dataEvent = await eventModel.find({ _id: idEvent, status: "Draft", orders: [] });
             if (!dataEvent) {
                 return res.status(400).json({
