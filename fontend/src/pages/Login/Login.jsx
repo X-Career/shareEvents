@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
@@ -17,7 +17,7 @@ const Login = () => {
 
       if (response.status === 200) {
         console.log("Đăng nhập thành công!");
-        alert(response.data.message);
+        message.success(response.data.message);
         
 
         // const { image } = response.data.user.image;
@@ -29,11 +29,11 @@ const Login = () => {
         }
         navigate("/");
       } else {
-        alert("Đăng nhập thất bại.");
+        message.error("Đăng nhập thất bại.");
       }
     } catch (error) {
       console.log("Lỗi:", error.response.data.message);
-      alert(error.response.data.message);
+      message.error(error.response.data.message);
     }
   };
 
