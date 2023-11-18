@@ -78,31 +78,36 @@ const getAllSeats = async (req, res) => {
     }
 };
 
-// const getAllSeatsStandard = async (req, res) => {
-//     try {
-//         const idEvent = req.params.id;
-//         const dataSeatsStandard = await seatModel.find({type: "Standard"}).populate({
-//             path: "events",
-//             match: { _id: idEvent}
-//         });
+const getAllIdSeat = async (req, res) => {
+    try {
+        const idEvent = req.params.id;
+        const dataSeatsStandard = await seatModel.find({type: "Standard"}).populate({
+            path: "events",
+            match: { _id: idEvent}
+        });
 
-//         console.log(dataSeatsStandard)
-//     } catch (error) {
+        console.log(dataSeatsStandard)
+    } catch (error) {
 
-//     }
-// };
+    }
+};
 
 const getSeatById = async (req, res) => {
     try {
-        const idSeat = req.params.id;
-        const data = await seatModel.findById(idSeat).populate("events")
-
+        const dataSeats = await seatModel.find({});
         if (!data) {
             return res.status(404).json({ message: "Seat is not found" });
         }
+
+        // console.log(dataSeats);
+        const seats = [];
+        for (i = 0; i < dataSeats.length; i++) {
+            seats.push(String(dataSeats[i]._id));
+        }
+
         return res.status(200).json({
             message: "Seat is successfully",
-            datas: data,
+            result: seats,
         });
     } catch (error) {
         return res.status(500).json({
@@ -165,5 +170,6 @@ module.exports = {
     getAllSeats,
     getSeatById,
     updateSeat,
-    deleteSeat
+    deleteSeat,
+    getAllIdSeat
 }
