@@ -38,7 +38,7 @@ const createAnEvent = () => {
   const accessToken = useSelector((state) => state.accessToken);
   const API_RegisterEvent = "https://beshareevents.onrender.com/event/createEvent";
   const API_CategoriesEvent = "https://beshareevents.onrender.com/category";
-  const API_SeatEvent = "https://beshareevents.onrender.com/seat/getAllSeats";
+  const API_SeatEvent = "https://beshareevents.onrender.com/seat/getAllidSeats";
   const [form] = Form.useForm();
   const [errorVisible, setErrorVisible] = useState(false);
   const [categories, setCategories] = useState([]);

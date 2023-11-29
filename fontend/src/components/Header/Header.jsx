@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../../assets/images/logo.png"
+import { Link } from "react-router-dom";
 import "./Header.css";
 import { Layout, Menu, Input, Button, Dropdown, Avatar } from "antd";
 import {
@@ -7,7 +8,6 @@ import {
   SearchOutlined,
   GlobalOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutAction } from "../../redux/users/logoutAction";
 
@@ -32,7 +32,9 @@ const Header = () => {
   const UserMenu = (
     <Menu>
       {/* <Menu.Item>{userName}</Menu.Item>  */}
-      <Menu.Item key="profile">Profile</Menu.Item>
+      <Menu.Item key="profile">
+      <Link to="/admin/manage-events">Profile</Link>
+      </Menu.Item>
       <Menu.Item key="logout" onClick={handleLogout}>
         Logout
       </Menu.Item>
